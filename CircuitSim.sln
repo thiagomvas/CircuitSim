@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitSim.Console", "Circu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitSim.Core", "CircuitSim.Core\CircuitSim.Core.csproj", "{CC765495-51EA-43F7-B2B6-21591C45531E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircuitSim.Tests", "CircuitSim.Tests\CircuitSim.Tests.csproj", "{6B110073-8FB9-42F4-B676-7ABBB5A746C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CC765495-51EA-43F7-B2B6-21591C45531E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC765495-51EA-43F7-B2B6-21591C45531E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC765495-51EA-43F7-B2B6-21591C45531E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B110073-8FB9-42F4-B676-7ABBB5A746C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B110073-8FB9-42F4-B676-7ABBB5A746C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B110073-8FB9-42F4-B676-7ABBB5A746C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B110073-8FB9-42F4-B676-7ABBB5A746C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

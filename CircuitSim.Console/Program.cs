@@ -1,31 +1,34 @@
-﻿using CircuitSim.Console;
-using CircuitSim.Core.Common;
+﻿using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 
-var root = new Wire() { Voltage = 5, Current = 0.1 };
-var led = new Resistor() { Resistance = 10 };
-root.Outputs.Add(led);
-var secondWire = new Wire();
-led.Outputs.Add(secondWire);
-var secondLed = new Resistor() { Resistance = 10 };
-secondWire.Outputs.Add(secondLed);
-var thirdWire = new Wire();
-secondLed.Outputs.Add(thirdWire);
+var root = new VoltageSource() { Voltage = 5 };
+var resistor = new Resistor() { Resistance = 10 };
+var resistor2 = new Resistor() { Resistance = 10 };
+var wire1 = new Wire();
+var wire2 = new Wire();
+var wire3 = new Wire();
+var wire4 = new Wire();
+root.Outputs.Add(wire1);
+root.Outputs.Add(wire2);
+wire1.Outputs.Add(resistor);
+wire2.Outputs.Add(resistor2);
+resistor.Outputs.Add(wire3);
+resistor2.Outputs.Add(wire4);
 
-// List voltage of all wires
 Console.WriteLine($"Source: {root}");
-Console.WriteLine($"LED: {led}");
-Console.WriteLine($"Wire2: {secondWire}");
-Console.WriteLine($"LED2: {secondLed}");
-Console.WriteLine($"Wire3: {thirdWire}");
+Console.WriteLine($"Resistor: {resistor}");
+Console.WriteLine($"Wire: {wire1}");
+Console.WriteLine($"Resistor2: {resistor2}");
+Console.WriteLine($"Wire2: {wire2}");
+Console.WriteLine($"Total Res: {root.GetCircuitResistance()}");
+Console.WriteLine($"Wire1 Res: {wire1.GetCircuitResistance()}");
+Console.WriteLine($"Wire2 Res: {wire2.GetCircuitResistance()}");
 
 
-Console.WriteLine("Root -> LED -> Wire2 -> LED2 -> Wire3");
-
-Console.WriteLine("AFTER FLOW");
 root.Flow();
+Console.WriteLine("======================================");
 Console.WriteLine($"Source: {root}");
-Console.WriteLine($"LED: {led}");
-Console.WriteLine($"Wire2: {secondWire}");
-Console.WriteLine($"LED2: {secondLed}");
-Console.WriteLine($"Wire3: {thirdWire}");
+Console.WriteLine($"Resistor: {resistor}");
+Console.WriteLine($"Wire: {wire1}");
+Console.WriteLine($"Resistor2: {resistor2}");
+Console.WriteLine($"Wire2: {wire2}");
