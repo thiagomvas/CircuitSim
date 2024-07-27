@@ -9,10 +9,11 @@ var wire2 = new Wire();
 var wire3 = new Wire();
 var wire4 = new Wire();
 root.Outputs.Add(wire1);
-root.Outputs.Add(wire2);
 wire1.Outputs.Add(resistor);
-wire2.Outputs.Add(resistor2);
-resistor.Outputs.Add(wire3);
+resistor.Outputs.Add(wire2);
+
+root.Outputs.Add(wire3);
+wire3.Outputs.Add(resistor2);
 resistor2.Outputs.Add(wire4);
 
 Console.WriteLine($"Source: {root}");
@@ -30,5 +31,8 @@ Console.WriteLine("======================================");
 Console.WriteLine($"Source: {root}");
 Console.WriteLine($"Resistor: {resistor}");
 Console.WriteLine($"Wire: {wire1}");
-Console.WriteLine($"Resistor2: {resistor2}");
 Console.WriteLine($"Wire2: {wire2}");
+Console.WriteLine();
+Console.WriteLine($"Wire3: {wire3}");
+Console.WriteLine($"Resistor2: {resistor2}");
+Console.WriteLine($"Wire4: {wire4}");
