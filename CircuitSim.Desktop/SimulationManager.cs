@@ -11,6 +11,17 @@ namespace CircuitSim.Desktop
 
         public void Update()
         {
+            if(IsMouseButtonPressed(MouseButton.Left))
+            {
+                isDrawing = true;
+            }
+            if(IsMouseButtonReleased(MouseButton.Left))
+            {
+                isDrawing = false;
+            }
+
+
+
             foreach (var wire in Wires)
             {
                 wire.Flow();
