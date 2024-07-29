@@ -8,6 +8,7 @@ namespace CircuitSim.Desktop
 {
     internal class SimulationManager
     {
+        private double maxVoltage = 1;
         private bool isDrawing = false;
         private Vector2 wireStart;
         private const float GridSize = 20.0f; // Define the grid size
@@ -52,6 +53,8 @@ namespace CircuitSim.Desktop
                 Hovered = null;
                 foreach (var wire in Wires)
                 {
+                    if (wire.Voltage > maxVoltage)
+                        maxVoltage = wire.Voltage;
                     if (CheckCollisionPointLine(GetMousePosition(), wire.Start, wire.End, 4))
                     {
                         Hovered = wire;
@@ -84,24 +87,23 @@ namespace CircuitSim.Desktop
             DrawText("F - Flow", 10, 160, 20, Color.RayWhite);
             DrawText("R - Reset", 10, 190, 20, Color.RayWhite);
             DrawText($"Selected = {WireType.Name}", 10, 220, 20, Color.RayWhite);
+            DrawText($"Max: {maxVoltage}V", 10, 250, 20, Color.RayWhite);
             foreach (var wire in Wires)
             {
-                DrawLineEx(wire.Start, wire.End, 2, GetColor(wire));
+                WireRenderer.Render(wire, GetColor(wire));
             }
         }
 
         private Color GetColor(Wire wire)
         {
             if(Hovered == wire)
-                return Color.Yellow;
-            if(wire.GetType() == typeof(VoltageSource))
-                return Color.Red;
-            if (wire.GetType() == typeof(Resistor))
                 return Color.Blue;
-            if (wire.GetType() == typeof(Wire))
-                return Color.White;
+            if (Hovered != null && Hovered.Inputs.Contains(wire))
+                return Color.Red;
+            if(Hovered != null && Hovered.Outputs.Contains(wire))
+                return Color.Yellow;
 
-            return Color.Gray;
+            return new Color(25, (int)Math.Min((wire.Voltage / maxVoltage * 230) + 25, 255), 25, 255);
         }
         private Vector2 SnapToGrid(Vector2 position)
         {
@@ -125,7 +127,6 @@ namespace CircuitSim.Desktop
             {
                 newWire = new Wire { Start = wireStart, End = wireEnd };
             }
-
             Wires.Add(newWire);
             System.Console.WriteLine("Created Wire");
 
