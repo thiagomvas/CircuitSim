@@ -4,6 +4,8 @@ namespace CircuitSim.Core.Common
 {
     public class Wire
     {
+        private readonly double preFirstSimVoltage = 0;
+        private readonly double preFirstSimCurrent = 0;
         public double Voltage { get; set; } = 0;
         public double Current { get; set; } = 0;
         public double Resistance { get; set; } = 0;
@@ -12,14 +14,31 @@ namespace CircuitSim.Core.Common
         public Vector2 End { get; set; }
         public List<Wire> Inputs { get; set; }
         public List<Wire> Outputs { get; set; }
-
         public Wire()
         {
+            preFirstSimCurrent = 0;
+            preFirstSimVoltage = 0;
+            Inputs = new List<Wire>();
+            Outputs = new List<Wire>();
+        }
+        public Wire(double voltage, double current)
+        {
+            preFirstSimCurrent = current;
+            preFirstSimVoltage = voltage;
             Inputs = new List<Wire>();
             Outputs = new List<Wire>();
         }
 
-        public virtual void Flow() => DefaultFlow(Voltage, Current);
+        public void ResetState()
+        {
+            Voltage = preFirstSimVoltage;
+            Current = preFirstSimCurrent;
+        }
+        public virtual void Flow()
+        {
+            ResetState();
+            DefaultFlow(Voltage, Current);
+        }
 
         public void DefaultFlow(double voltage, double current)
         {
