@@ -11,7 +11,7 @@ namespace CircuitSim.Core.Components
 
             Current = Voltage / GetCircuitResistance();
 
-            base.Flow();
+            DefaultFlow(Voltage, Current);
         }
     }
 }

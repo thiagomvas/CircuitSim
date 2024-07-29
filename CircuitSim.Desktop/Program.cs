@@ -1,5 +1,7 @@
-﻿using CircuitSim.Desktop;
+﻿using CircuitSim.Core.Components;
+using CircuitSim.Desktop;
 using Raylib_cs;
+using System.Numerics;
 using static Raylib_cs.Raylib;
 
 var manager = new SimulationManager();
