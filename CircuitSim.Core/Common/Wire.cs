@@ -4,8 +4,9 @@ namespace CircuitSim.Core.Common
 {
     public class Wire
     {
-        private readonly double preFirstSimVoltage = 0;
-        private readonly double preFirstSimCurrent = 0;
+        public double PreFlowVoltage = 0;
+        public double PreFlowCurrent = 0;
+
         public double Voltage { get; set; } = 0;
         public double Current { get; set; } = 0;
         public double Resistance { get; set; } = 0;
@@ -21,19 +22,14 @@ namespace CircuitSim.Core.Common
         public List<Wire> Outputs { get; set; }
         public Wire()
         {
-            preFirstSimCurrent = 0;
-            preFirstSimVoltage = 0;
-            Inputs = new List<Wire>();
-            Outputs = new List<Wire>();
-        }
-        public Wire(double voltage, double current)
-        {
-            preFirstSimCurrent = current;
-            preFirstSimVoltage = voltage;
             Inputs = new List<Wire>();
             Outputs = new List<Wire>();
         }
 
+        public void AddVoltage(double v) => PreFlowVoltage += v;
+        public void AddCurrent(double a) => PreFlowCurrent += a;
+        public void SetVoltage(double v) => PreFlowVoltage = v;
+        public void SetCurrent(double a) => PreFlowCurrent = a;
         private void UpdateValues()
         {
             Center = (End + Start) / 2;
@@ -46,22 +42,28 @@ namespace CircuitSim.Core.Common
 
         public void ResetState()
         {
-            Voltage = preFirstSimVoltage;
-            Current = preFirstSimCurrent;
+
         }
         public virtual void Flow()
         {
-            DefaultFlow(Voltage, Current);
+            DefaultFlow();
         }
 
-        public void DefaultFlow(double voltage, double current)
+        public void DefaultFlow(double voltageAddition = 0, double currentAddition = 0)
         {
+            Voltage = PreFlowVoltage;
+            Current = PreFlowCurrent;
+            PreFlowVoltage = 0;
+            PreFlowCurrent = 0;
+            Voltage = Math.Max(0, Voltage);
+            Current = Math.Max(0, Current);
+
             if (Outputs.Count == 1)
             {
                 var @out = Outputs[0];
 
-                @out.Voltage = voltage;
-                @out.Current = current;
+                @out.AddVoltage(Voltage + voltageAddition);
+                @out.AddCurrent(Current + currentAddition);
 
                 @out.Flow();
             }
@@ -70,9 +72,9 @@ namespace CircuitSim.Core.Common
                 var totalResistance = GetCircuitResistance();
                 foreach (var output in Outputs)
                 {
-                    output.Voltage = voltage;
+                    output.AddVoltage(Voltage + voltageAddition);
 
-                    output.Current = current * (totalResistance / output.GetCircuitResistance());
+                    output.AddCurrent(Current * (totalResistance / output.GetCircuitResistance()) + currentAddition);
 
                     output.Flow();
                 }

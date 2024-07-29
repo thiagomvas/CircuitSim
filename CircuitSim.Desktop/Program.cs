@@ -28,9 +28,10 @@ while (!WindowShouldClose())
 {
     manager.Update();
     source.Flow();
-    source.Voltage = Math.Sin(GetTime()) * 10 + 10;
+    source.SupplyVoltage = (Math.Sin(GetTime() / 10) * 10 + 10);
     BeginDrawing();
     ClearBackground(Constants.BackgroundColor);
+    DrawText($"Total Res = {source.GetCircuitResistance()}", 10, 500, 16, Color.RayWhite);
     manager.Draw();
     EndDrawing();
 }

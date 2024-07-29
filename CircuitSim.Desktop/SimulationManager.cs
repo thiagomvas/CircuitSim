@@ -121,7 +121,7 @@ namespace CircuitSim.Desktop
             }
             else if(WireType == typeof(VoltageSource))
             {
-                newWire = new VoltageSource { Voltage = 10, Start = wireStart, End = wireEnd };
+                newWire = new VoltageSource { SupplyVoltage = 10, Start = wireStart, End = wireEnd };
             }
             else
             {
