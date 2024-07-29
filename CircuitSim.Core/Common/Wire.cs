@@ -10,8 +10,13 @@ namespace CircuitSim.Core.Common
         public double Current { get; set; } = 0;
         public double Resistance { get; set; } = 0;
 
-        public Vector2 Start { get; set; }
-        public Vector2 End { get; set; }
+        private Vector2 start, end;
+        public Vector2 Start { get => start; set { start = value; UpdateValues(); } }
+        public Vector2 End { get => end; set { end = value; UpdateValues(); } }
+        public Vector2 Center { get; private set; }
+        public Vector2 Direction { get; private set; }
+        public float Length { get; private set; }
+        public float AngleDeg { get; private set; }
         public List<Wire> Inputs { get; set; }
         public List<Wire> Outputs { get; set; }
         public Wire()
@@ -27,6 +32,16 @@ namespace CircuitSim.Core.Common
             preFirstSimVoltage = voltage;
             Inputs = new List<Wire>();
             Outputs = new List<Wire>();
+        }
+
+        private void UpdateValues()
+        {
+            Center = (End + Start) / 2;
+            Length = (End - Start).Length();
+            Direction = Vector2.Normalize(End - Start);
+
+            var dir = (End - Start);
+            AngleDeg = MathF.Atan2(dir.Y, dir.X) * 180 / MathF.PI;
         }
 
         public void ResetState()
