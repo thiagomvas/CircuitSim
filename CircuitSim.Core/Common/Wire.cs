@@ -36,7 +36,6 @@ namespace CircuitSim.Core.Common
         }
         public virtual void Flow()
         {
-            ResetState();
             DefaultFlow(Voltage, Current);
         }
 

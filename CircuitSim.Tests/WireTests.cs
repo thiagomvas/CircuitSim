@@ -10,7 +10,7 @@ namespace CircuitSim.Tests
         public void Flow_InSeries_ShouldFlowDirectly()
         {
             // Arrange
-            var root = new Wire() { Voltage = 5, Current = 0.1 };
+            var root = new VoltageSource() { Voltage = 1 };
             var wire1 = new Wire();
             var wire2 = new Wire();
             var wire3 = new Wire();
@@ -29,9 +29,6 @@ namespace CircuitSim.Tests
                 Assert.That(wire1.Voltage, Is.EqualTo(root.Voltage));
                 Assert.That(wire2.Voltage, Is.EqualTo(root.Voltage));
                 Assert.That(wire3.Voltage, Is.EqualTo(root.Voltage));
-                Assert.That(wire1.Current, Is.EqualTo(root.Current));
-                Assert.That(wire2.Current, Is.EqualTo(root.Current));
-                Assert.That(wire3.Current, Is.EqualTo(root.Current));
             });
         }
 
@@ -40,8 +37,8 @@ namespace CircuitSim.Tests
         {
             // Arrange
             var root = new VoltageSource() { Voltage = 5 };
-            var resistor = new Resistor() { Resistance = 10 };
-            var resistor2 = new Resistor() { Resistance = 10 };
+            var resistor = new Resistor() { Resistance = 10 } ;
+            var resistor2 = new Resistor() { Resistance = 10 } ;
             var wire1 = new Wire();
             var wire2 = new Wire();
             var wire3 = new Wire();

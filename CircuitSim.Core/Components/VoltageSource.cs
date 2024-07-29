@@ -8,8 +8,10 @@ namespace CircuitSim.Core.Components
         {
             if (Inputs.Count != 0)
                 Inputs = new();
-
-            Current = Voltage / GetCircuitResistance();
+            if(Current == 0)
+            {
+                Current = Voltage / GetCircuitResistance();
+            }
 
             DefaultFlow(Voltage, Current);
         }
