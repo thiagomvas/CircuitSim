@@ -2,33 +2,63 @@
 using static Raylib_cs.Raylib;
 using Raylib_cs;
 using CircuitSim.Core.Components;
+using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Reflection;
 
 namespace CircuitSim.Desktop
 {
     public static class WireRenderer
     {
+        private static readonly Dictionary<Type, Action<Wire, Color>> RenderActions;
+
+        static WireRenderer()
+        {
+            RenderActions = new Dictionary<Type, Action<Wire, Color>>();
+
+            // Get all methods that match the rendering pattern and add them to the dictionary
+            var methods = typeof(WireRenderer).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
+            foreach (var method in methods)
+            {
+                if (method.Name.StartsWith("Render") && method.GetParameters().Length == 2 &&
+                    method.GetParameters()[0].ParameterType == typeof(Wire) &&
+                    method.GetParameters()[1].ParameterType == typeof(Color))
+                {
+                    var action = (Action<Wire, Color>)Delegate.CreateDelegate(typeof(Action<Wire, Color>), method);
+                    Type? wireType = method.Name == "RenderWire" ? typeof(Wire) : Assembly.GetAssembly(typeof(Wire))
+                        .GetTypes()
+                        .FirstOrDefault(t => t.Name == method.Name[6..]);
+
+
+                    if (wireType != null)
+                    {
+                        System.Console.WriteLine($"Assigning {method.Name} to {wireType.Name}");
+                        RenderActions[wireType] = action;
+                    }
+                }
+            }
+
+            // Ensure default rendering for Wire
+            if (!RenderActions.ContainsKey(typeof(Wire)))
+            {
+                RenderActions[typeof(Wire)] = RenderWire;
+            }
+        }
+
         public static void Render(Wire wire, Color color)
         {
             var type = wire.GetType();
-            if (type == typeof(Wire))
+            if (RenderActions.TryGetValue(type, out var renderAction))
             {
-                RenderWire(wire, color);
-                return;
-            }
-            else if (type == typeof(Resistor))
-            {
-                RenderResistor(wire, color);
-                return;
-            }
-            else if (type == typeof(VoltageSource))
-            {
-                RenderVoltageSource(wire, color);
-                return;
+                renderAction(wire, color);
             }
             else
+            {
                 RenderWire(wire, color);
+            }
         }
+
         private static void RenderWire(Wire wire, Color color)
         {
             DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
@@ -39,8 +69,8 @@ namespace CircuitSim.Desktop
             var rectSize = new Vector2(wire.Length * 0.5f, 50);
             var innerRectSize = new Vector2(wire.Length * 0.5f - Constants.WireWidth, 50 - Constants.WireWidth);
             DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
-            DrawRectanglePro(new(wire.Center, rectSize), rectSize/2, wire.AngleDeg, color);
-            DrawRectanglePro(new(wire.Center, innerRectSize), innerRectSize/2, wire.AngleDeg, Constants.BackgroundColor);
+            DrawRectanglePro(new Rectangle(wire.Center, rectSize), rectSize / 2, wire.AngleDeg, color);
+            DrawRectanglePro(new Rectangle(wire.Center, innerRectSize), innerRectSize / 2, wire.AngleDeg, Constants.BackgroundColor);
             string txt = $"{wire.Resistance} Ohms";
             DrawTextPro(GetFontDefault(),
                         txt,
@@ -50,7 +80,6 @@ namespace CircuitSim.Desktop
                         16,
                         1,
                         Color.White);
-            
         }
 
         private static void RenderVoltageSource(Wire wire, Color color)
@@ -71,7 +100,6 @@ namespace CircuitSim.Desktop
                         16,
                         1,
                         Color.White);
-
         }
     }
 }
