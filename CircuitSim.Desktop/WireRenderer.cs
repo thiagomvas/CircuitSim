@@ -1,14 +1,14 @@
 ﻿using CircuitSim.Core.Common;
 using static Raylib_cs.Raylib;
 using Raylib_cs;
-using CircuitSim.Core.Components;
-using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Reflection;
 
 namespace CircuitSim.Desktop
 {
+    /// <summary>
+    /// Utility class for rendering different components using <see cref="Raylib"/>
+    /// </summary>
     public static class WireRenderer
     {
         private static readonly Dictionary<Type, Action<Wire, Color>> RenderActions;
@@ -46,6 +46,11 @@ namespace CircuitSim.Desktop
             }
         }
 
+        /// <summary>
+        /// Renders a wire on screen. 
+        /// </summary>
+        /// <param name="wire">The wire to render</param>
+        /// <param name="color">The color of the wire</param>
         public static void Render(Wire wire, Color color)
         {
             var type = wire.GetType();

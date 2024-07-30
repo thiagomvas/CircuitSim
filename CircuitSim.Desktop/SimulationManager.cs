@@ -6,9 +6,16 @@ using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
 {
+    /// <summary>
+    /// Manages the simulation of the circuit.
+    /// </summary>
     internal class SimulationManager
     {
         private static SimulationManager instance;
+
+        /// <summary>
+        /// Gets the singleton instance of the SimulationManager.
+        /// </summary>
         public static SimulationManager Instance
         {
             get
@@ -18,8 +25,11 @@ namespace CircuitSim.Desktop
                 return instance;
             }
         }
-        private SimulationManager() {
+
+        private SimulationManager()
+        {
         }
+
         private double maxVoltage = 1;
         private bool isDrawing = false;
         private Vector2 wireStart;
@@ -29,6 +39,9 @@ namespace CircuitSim.Desktop
         private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
 
+        /// <summary>
+        /// Updates the simulation state.
+        /// </summary>
         public void Update()
         {
             if (IsKeyPressed(KeyboardKey.One))
@@ -39,7 +52,7 @@ namespace CircuitSim.Desktop
             {
                 WireType = typeof(Resistor);
             }
-            if(IsKeyPressed(KeyboardKey.Three))
+            if (IsKeyPressed(KeyboardKey.Three))
             {
                 WireType = typeof(VoltageSource);
             }
@@ -47,7 +60,7 @@ namespace CircuitSim.Desktop
             if (IsMouseButtonPressed(MouseButton.Left))
             {
                 isDrawing = true;
-                drawPreview = (Wire) Activator.CreateInstance(WireType);
+                drawPreview = (Wire)Activator.CreateInstance(WireType);
                 wireStart = SnapToGrid(GetMousePosition());
                 drawPreview!.Start = SnapToGrid(GetMousePosition());
             }
@@ -90,9 +103,12 @@ namespace CircuitSim.Desktop
             }
         }
 
+        /// <summary>
+        /// Draws the simulation.
+        /// </summary>
         public void Draw()
         {
-            if(Hovered != null)
+            if (Hovered != null)
             {
                 DrawText($"Voltage: {Hovered.Voltage}V", 10, 10, 20, Color.RayWhite);
                 DrawText($"Current: {Hovered.Current}A", 10, 40, 20, Color.RayWhite);
@@ -112,15 +128,16 @@ namespace CircuitSim.Desktop
 
         private Color GetColor(Wire wire)
         {
-            if(Hovered == wire)
+            if (Hovered == wire)
                 return Color.Blue;
             if (Hovered != null && Hovered.Inputs.Contains(wire))
                 return Color.Red;
-            if(Hovered != null && Hovered.Outputs.Contains(wire))
+            if (Hovered != null && Hovered.Outputs.Contains(wire))
                 return Color.Yellow;
 
             return new Color(25, (int)Math.Min((wire.Voltage / maxVoltage * 230) + 25, 255), 25, 255);
         }
+
         private Vector2 SnapToGrid(Vector2 position)
         {
             float x = MathF.Round(position.X / GridSize) * GridSize;
@@ -128,6 +145,10 @@ namespace CircuitSim.Desktop
             return new Vector2(x, y);
         }
 
+        /// <summary>
+        /// Creates a new wire and adds it to the simulation.
+        /// </summary>
+        /// <param name="wireEnd">The end point of the wire.</param>
         public void CreateWire(Vector2 wireEnd)
         {
             Wire newWire;
@@ -135,7 +156,7 @@ namespace CircuitSim.Desktop
             {
                 newWire = new Resistor { Start = wireStart, End = wireEnd, Resistance = 1 };
             }
-            else if(WireType == typeof(VoltageSource))
+            else if (WireType == typeof(VoltageSource))
             {
                 newWire = new VoltageSource { SupplyVoltage = 10, Start = wireStart, End = wireEnd };
             }
