@@ -4,6 +4,7 @@ using Raylib_cs;
 using System.Numerics;
 using System.Reflection;
 using CircuitSim.Core;
+using System.ComponentModel;
 
 namespace CircuitSim.Desktop
 {
@@ -137,6 +138,19 @@ namespace CircuitSim.Desktop
                         16,
                         1,
                         Color.White);
+        }
+
+        private static void RenderGround(Wire wire, Color color)
+        {
+            var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
+
+            DrawLineEx(wire.Start, wire.End - wire.Direction * 20, Constants.WireWidth, color);
+            DrawLineEx(wire.End - wire.Direction * 20 + normal * 20, wire.End - wire.Direction * 20 - normal * 20, Constants.WireWidth, color);
+
+            DrawLineEx(wire.End - wire.Direction * 10 + normal * 12, wire.End - wire.Direction * 10 - normal * 12, Constants.WireWidth, color);
+
+            DrawLineEx(wire.End + normal * 4, wire.End - normal * 4, Constants.WireWidth, color);
+
         }
     }
 }
