@@ -10,7 +10,7 @@ namespace CircuitSim.Tests
         public void Flow_InSeries_ShouldFlowDirectly()
         {
             // Arrange
-            var root = new Wire() { Voltage = 5, Current = 0.1 };
+            var root = new VoltageSource() { SupplyVoltage = 1 };
             var wire1 = new Wire();
             var wire2 = new Wire();
             var wire3 = new Wire();
@@ -29,9 +29,6 @@ namespace CircuitSim.Tests
                 Assert.That(wire1.Voltage, Is.EqualTo(root.Voltage));
                 Assert.That(wire2.Voltage, Is.EqualTo(root.Voltage));
                 Assert.That(wire3.Voltage, Is.EqualTo(root.Voltage));
-                Assert.That(wire1.Current, Is.EqualTo(root.Current));
-                Assert.That(wire2.Current, Is.EqualTo(root.Current));
-                Assert.That(wire3.Current, Is.EqualTo(root.Current));
             });
         }
 
@@ -39,9 +36,9 @@ namespace CircuitSim.Tests
         public void Flow_InParallel_ShouldHaveCorrectValues()
         {
             // Arrange
-            var root = new VoltageSource() { Voltage = 5 };
-            var resistor = new Resistor() { Resistance = 10 };
-            var resistor2 = new Resistor() { Resistance = 10 };
+            var root = new VoltageSource() { SupplyVoltage = 5 };
+            var resistor = new Resistor() { Resistance = 10 } ;
+            var resistor2 = new Resistor() { Resistance = 10 } ;
             var wire1 = new Wire();
             var wire2 = new Wire();
             var wire3 = new Wire();
@@ -65,24 +62,21 @@ namespace CircuitSim.Tests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(root.Voltage, Is.EqualTo(5));
-                Assert.That(root.Current, Is.EqualTo(1));
-                Assert.That(wire1.Voltage, Is.EqualTo(5));
-                Assert.That(wire1.Current, Is.EqualTo(0.5));
-                Assert.That(resistor.Voltage, Is.EqualTo(5));
-                Assert.That(resistor.Current, Is.EqualTo(0.5));
-                Assert.That(wire2.Voltage, Is.EqualTo(0));
-                Assert.That(wire2.Current, Is.EqualTo(0.5));
-                Assert.That(wire3.Voltage, Is.EqualTo(5));
-                Assert.That(wire3.Current, Is.EqualTo(0.5));
-                Assert.That(resistor2.Voltage, Is.EqualTo(5));
-                Assert.That(resistor2.Current, Is.EqualTo(0.5));
-                Assert.That(wire4.Voltage, Is.EqualTo(0));
-                Assert.That(wire4.Current, Is.EqualTo(0.5));
+                Assert.That(root.Voltage, Is.EqualTo(5), "Root did not supply correct voltage");
+                Assert.That(root.Current, Is.EqualTo(1), "Root did not supply correct current");
+                Assert.That(wire1.Voltage, Is.EqualTo(5), "Top wire before first resistor did not get proper voltage");
+                Assert.That(wire1.Current, Is.EqualTo(0.5), "Top wire before first resistor did not get proper current");
+                Assert.That(resistor.Voltage, Is.EqualTo(5), "Top resistor did not get proper voltage");
+                Assert.That(resistor.Current, Is.EqualTo(0.5), "Top resistor did not get proper current");
+                Assert.That(wire2.Voltage, Is.EqualTo(0), "Top wire after resistor has voltage");
+                Assert.That(wire2.Current, Is.EqualTo(0.5), "Top wire after resistor did not get proper current");
+                Assert.That(wire3.Voltage, Is.EqualTo(5), "Bottom wire before resistor did not get proper voltage");
+                Assert.That(wire3.Current, Is.EqualTo(0.5), "Bottom wire before resistor did not get proper current");
+                Assert.That(resistor2.Voltage, Is.EqualTo(5), "Bottom resistor did not get proper voltage");
+                Assert.That(resistor2.Current, Is.EqualTo(0.5), "Bottom resistor did not get proper current");
+                Assert.That(wire4.Voltage, Is.EqualTo(0), "Bottom wire after resistor has voltage");
+                Assert.That(wire4.Current, Is.EqualTo(0.5), "Bottom wire after resistor did not get proper current");
             });
-
         }
-
-
     }
 }

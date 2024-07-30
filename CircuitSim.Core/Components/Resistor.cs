@@ -6,7 +6,7 @@ namespace CircuitSim.Core.Components
     {
         public override void Flow()
         {
-            DefaultFlow(Voltage - Current * Resistance, Current);
+            DefaultFlow(-PreFlowCurrent * Resistance);
         }
     }
 }
