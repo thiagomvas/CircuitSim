@@ -8,6 +8,18 @@ namespace CircuitSim.Desktop
 {
     internal class SimulationManager
     {
+        private static SimulationManager instance;
+        public static SimulationManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new();
+                return instance;
+            }
+        }
+        private SimulationManager() {
+        }
         private double maxVoltage = 1;
         private bool isDrawing = false;
         private Vector2 wireStart;
@@ -139,13 +151,11 @@ namespace CircuitSim.Desktop
                     {
                         wire.Outputs.Add(newWire);
                         newWire.Inputs.Add(wire);
-                        System.Console.WriteLine("Connected Wires: wire.End == newWire.Start");
                     }
                     if (wire.Start == newWire.End)
                     {
                         newWire.Outputs.Add(wire);
                         wire.Inputs.Add(newWire);
-                        System.Console.WriteLine("Connected Wires: newWire.End == wire.Start");
                     }
                 }
             }

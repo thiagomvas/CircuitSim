@@ -2,10 +2,9 @@
 using CircuitSim.Core.Components;
 using CircuitSim.Desktop;
 using Raylib_cs;
-using System.Numerics;
 using static Raylib_cs.Raylib;
 
-var manager = new SimulationManager();
+var manager = SimulationManager.Instance;
 
 var source = new VoltageSource() { Voltage = 10, Start = new(400, 100), End = new(500, 100) };
 var resistor = new Resistor() {  Resistance = 1, Start = new(500, 100), End =new(600, 100) };
