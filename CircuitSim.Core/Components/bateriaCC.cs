@@ -1,20 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CircuitSim.Core.Common;
+﻿using CircuitSim.Core.Common;
 
 namespace CircuitSim.Core.Components
 {
+    /// <summary>
+    /// Represents a direct current (DC) battery component.
+    /// </summary>
     public class BateriaCC : Wire
     {
-
+        /// <summary>
+        /// Gets or sets the voltage output of the battery.
+        /// </summary>
         public double VoltageOutput { get; set; }
+
+        /// <summary>
+        /// Gets or sets the capacity of the battery.
+        /// </summary>
         public double Capacity { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether the battery is active.
+        /// </summary>
         public bool IsActive => Capacity > 0;
 
+        /// <summary>
+        /// Performs the flow of current through the battery.
+        /// </summary>
         public override void Flow()
         {
             if (IsActive)

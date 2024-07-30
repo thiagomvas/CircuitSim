@@ -1,7 +1,7 @@
 ﻿using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 
-var source = new VoltageSource() { Voltage = 10 };
+var source = new VoltageSource() { SupplyVoltage = 10 };
 var wire = new Wire();
 var resistor = new Resistor() { Resistance = 1 };
 var wire2 = new Wire();
