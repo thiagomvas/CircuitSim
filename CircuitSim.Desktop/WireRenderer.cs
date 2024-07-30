@@ -117,5 +117,26 @@ namespace CircuitSim.Desktop
                 DrawCircleV(wire.Center, 20 - Constants.WireWidth, Constants.BackgroundColor);
             DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
         }
+
+        private static void RenderAmmeter(Wire wire, Color color)
+        {
+            var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
+            Utils.DrawLineStrip(color, wire.Start,
+                wire.Center,
+                wire.Center + normal * 10,
+                wire.Center + wire.Direction * 10,
+                wire.Center - normal * 10,
+                wire.Center,
+                wire.End);
+            string txt = $"{wire.Current:0.00}A";
+            DrawTextPro(GetFontDefault(),
+                        txt,
+                        wire.Center + normal * 16,
+                        MeasureTextEx(GetFontDefault(), txt, 16, 1) * 0.5f,
+                        wire.AngleDeg,
+                        16,
+                        1,
+                        Color.White);
+        }
     }
 }

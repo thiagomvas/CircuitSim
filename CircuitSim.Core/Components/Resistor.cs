@@ -9,7 +9,7 @@ namespace CircuitSim.Core.Components
     {
         /// <inheritdoc/>
         public override void Flow()
-        {
+        { 
             DefaultFlow(-PreFlowCurrent * Resistance);
         }
     }
