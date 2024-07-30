@@ -7,7 +7,7 @@ using CircuitSim.Core.Common;
 
 namespace CircuitSim.Core.Components
 {
-    public class bateriaCC : Wire
+    public class BateriaCC : Wire
     {
 
         public double VoltageOutput { get; set; }
@@ -22,7 +22,7 @@ namespace CircuitSim.Core.Components
                 Capacity -= VoltageOutput * 0.1;
                 if (Capacity < 0) Capacity = 0;
 
-                Voltage = VoltageOutput;
+                SetVoltage(VoltageOutput);
 
                 base.Flow();
             }
