@@ -3,6 +3,7 @@ using static Raylib_cs.Raylib;
 using Raylib_cs;
 using System.Numerics;
 using System.Reflection;
+using CircuitSim.Core;
 
 namespace CircuitSim.Desktop
 {
@@ -105,6 +106,16 @@ namespace CircuitSim.Desktop
                         16,
                         1,
                         Color.White);
+        }
+
+        private static void RenderLED(Wire wire, Color color)
+        {
+            LED led = (LED) wire;
+            DrawLineEx(wire.Start, wire.Center - wire.Direction * 20, Constants.WireWidth, color);
+            DrawCircleV(wire.Center, 20, Utils.SystemDrawingColorToRaylib(led.LitColor));
+            if(!led.IsOn)
+                DrawCircleV(wire.Center, 20 - Constants.WireWidth, Constants.BackgroundColor);
+            DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
         }
     }
 }

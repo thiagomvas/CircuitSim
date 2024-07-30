@@ -1,6 +1,7 @@
 ﻿using CircuitSim.Core.Common;
+using System.Drawing;
 
-namespace CircuitSim.Console
+namespace CircuitSim.Core
 {
     /// <summary>
     /// Represents a LED component in a circuit.
@@ -10,7 +11,9 @@ namespace CircuitSim.Console
         /// <summary>
         /// Gets or sets the voltage consumption of the LED.
         /// </summary>
-        public double VoltageConsumption { get; set; }
+        public double VoltageConsumption { get; set; } = 5;
+
+        public Color LitColor { get; set; } = Color.White;
 
         /// <summary>
         /// Gets a value indicating whether the LED is on.
@@ -20,11 +23,7 @@ namespace CircuitSim.Console
         /// <inheritdoc/>
         public override void Flow()
         {
-            if (IsOn)
-            {
-                AddVoltage(-VoltageConsumption);
-                base.Flow();
-            }
+            DefaultFlow(-VoltageConsumption);
         }
     }
 }
