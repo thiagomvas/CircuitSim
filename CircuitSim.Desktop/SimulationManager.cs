@@ -26,6 +26,7 @@ namespace CircuitSim.Desktop
         private const float GridSize = 20.0f; // Define the grid size
         public List<Wire> Wires { get; set; } = new();
         public Wire? Hovered = null;
+        private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
 
         public void Update()
@@ -46,7 +47,9 @@ namespace CircuitSim.Desktop
             if (IsMouseButtonPressed(MouseButton.Left))
             {
                 isDrawing = true;
+                drawPreview = (Wire) Activator.CreateInstance(WireType);
                 wireStart = SnapToGrid(GetMousePosition());
+                drawPreview!.Start = SnapToGrid(GetMousePosition());
             }
             if (IsMouseButtonReleased(MouseButton.Left))
             {
@@ -58,7 +61,8 @@ namespace CircuitSim.Desktop
             if (isDrawing)
             {
                 var mousePos = SnapToGrid(GetMousePosition());
-                DrawLineEx(wireStart, mousePos, 2, Color.RayWhite);
+                drawPreview.End = mousePos;
+                WireRenderer.Render(drawPreview, Color.RayWhite);
             }
             else
             {
