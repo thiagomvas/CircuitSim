@@ -10,7 +10,7 @@ namespace CircuitSim.Desktop
 
         public static void DrawLineStrip(Color color, params Vector2[] points)
         {
-            for(int i = 1; i < points.Length; i++)
+            for (int i = 1; i < points.Length; i++)
             {
                 DrawLineEx(points[i - 1], points[i], Constants.WireWidth, color);
             }

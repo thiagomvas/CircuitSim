@@ -1,6 +1,4 @@
-﻿using CircuitSim.Core;
-using CircuitSim.Core.Common;
-using CircuitSim.Core.Components;
+﻿using CircuitSim.Core.Common;
 using CircuitSim.Desktop;
 using Raylib_cs;
 using static Raylib_cs.Raylib;

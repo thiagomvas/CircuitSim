@@ -1,14 +1,22 @@
 ﻿using CircuitSim.Core.DTOs;
 using Newtonsoft.Json.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CircuitSim.Core.Common
 {
+    /// <summary>
+    /// Represents a circuit composed of wires.
+    /// </summary>
     public class Circuit
     {
+        /// <summary>
+        /// Gets or sets the list of wires in the circuit.
+        /// </summary>
         public List<Wire> Wires { get; set; } = new List<Wire>();
 
+        /// <summary>
+        /// Adds a new wire to the circuit and connects it to existing wires if applicable.
+        /// </summary>
+        /// <param name="newWire">The wire to add to the circuit.</param>
         public void AddWire(Wire newWire)
         {
             foreach (var wire in Wires)
@@ -30,6 +38,10 @@ namespace CircuitSim.Core.Common
             Wires.Add(newWire);
         }
 
+        /// <summary>
+        /// Serializes the circuit to JSON format.
+        /// </summary>
+        /// <returns>The JSON representation of the circuit.</returns>
         public string SerializeToJson()
         {
             var entity = new JObject();
@@ -39,6 +51,11 @@ namespace CircuitSim.Core.Common
             return entity.ToString(Newtonsoft.Json.Formatting.Indented);
         }
 
+        /// <summary>
+        /// Deserializes a circuit from JSON format.
+        /// </summary>
+        /// <param name="json">The JSON representation of the circuit.</param>
+        /// <returns>The deserialized circuit.</returns>
         public static Circuit DeserializeFromJson(string json)
         {
             var entity = JObject.Parse(json);
@@ -46,7 +63,7 @@ namespace CircuitSim.Core.Common
 
             // Converting the JSON to a list of WireDTOs
             var dtos = entity["Wires"].ToObject<List<WireDTO>>();
-            foreach(var wire in entity["Wires"])
+            foreach (var wire in entity["Wires"])
             {
                 // Parsing the wire type
                 var type = ByName(wire["Type"]?.Value<string>()?.Split(',').First() ?? string.Empty);
@@ -58,21 +75,26 @@ namespace CircuitSim.Core.Common
                 // Defining the properties of the instance using Reflection
                 foreach (var prop in wire["Data"] as JObject)
                 {
-                    if(props.Any(p => p.Name == prop.Key))
+                    if (props.Any(p => p.Name == prop.Key))
                     {
                         var propInfo = props.First(p => p.Name == prop.Key);
-                        if(propInfo.CanWrite)
+                        if (propInfo.CanWrite)
                             propInfo.SetValue(wireInstance, prop.Value.ToObject(propInfo.PropertyType));
                     }
                 }
-                
+
                 // After all that headache, add to the circuit.
-                circuit.AddWire((Wire) wireInstance);
+                circuit.AddWire((Wire)wireInstance);
             }
 
             return circuit;
         }
 
+        /// <summary>
+        /// Gets the type by its name.
+        /// </summary>
+        /// <param name="name">The name of the type.</param>
+        /// <returns>The type with the specified name.</returns>
         private static Type? ByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

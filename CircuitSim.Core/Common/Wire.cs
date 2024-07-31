@@ -161,7 +161,7 @@ namespace CircuitSim.Core.Common
             }
             else
             {
-                
+
                 var totalResistance = GetCircuitResistance();
                 foreach (var output in Outputs)
                 {

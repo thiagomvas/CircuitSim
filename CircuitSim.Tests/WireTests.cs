@@ -37,8 +37,8 @@ namespace CircuitSim.Tests
         {
             // Arrange
             var root = new VoltageSource() { SupplyVoltage = 5 };
-            var resistor = new Resistor() { Resistance = 10 } ;
-            var resistor2 = new Resistor() { Resistance = 10 } ;
+            var resistor = new Resistor() { Resistance = 10 };
+            var resistor2 = new Resistor() { Resistance = 10 };
             var wire1 = new Wire();
             var wire2 = new Wire();
             var wire3 = new Wire();

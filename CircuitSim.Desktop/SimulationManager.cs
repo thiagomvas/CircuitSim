@@ -12,6 +12,10 @@ namespace CircuitSim.Desktop
     internal class SimulationManager
     {
         private static SimulationManager instance;
+
+        /// <summary>
+        /// Gets the circuit currently being rendered
+        /// </summary>
         public Circuit Circuit { get; private set; }
 
         /// <summary>
@@ -39,7 +43,11 @@ namespace CircuitSim.Desktop
         public Wire? Hovered = null;
         private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
-        
+
+        /// <summary>
+        /// Changes the circuit being rendered.
+        /// </summary>
+        /// <param name="circuit">The new circuit to render</param>
         public void UseCircuit(Circuit circuit)
         {
             this.Circuit = circuit;
@@ -174,7 +182,7 @@ namespace CircuitSim.Desktop
                 newWire = new Wire { Start = wireStart, End = wireEnd };
             }
             Circuit.AddWire(newWire);
-            
+
         }
     }
 }

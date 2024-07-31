@@ -16,17 +16,17 @@ var deserialized = Circuit.DeserializeFromJson(json);
 foreach (var wire in deserialized.Wires)
 {
     var type = wire.GetType();
-    if(type == typeof(VoltageSource))
+    if (type == typeof(VoltageSource))
     {
         var vs = (VoltageSource)wire;
         Console.WriteLine($"Voltage Source: {vs.SupplyVoltage}V");
     }
-    else if(type == typeof(Resistor))
+    else if (type == typeof(Resistor))
     {
-        var res = (Resistor) wire;
+        var res = (Resistor)wire;
         Console.WriteLine($"Resistor: {res.Resistance} Ohms");
     }
-    else if(type == typeof(Wire))
+    else if (type == typeof(Wire))
     {
         Console.WriteLine("Wire");
     }
