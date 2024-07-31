@@ -145,7 +145,7 @@
     {
       "Type": "CircuitSim.Core.Components.Resistor, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
       "Data": {
-        "Resistance": 1.0,
+        "Resistance": 1000.0,
         "Start": {
           "X": 720.0,
           "Y": 380.0

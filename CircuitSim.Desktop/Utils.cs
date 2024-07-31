@@ -44,5 +44,21 @@ namespace CircuitSim.Desktop
                 }
             }
         }
+        public static void DrawTextBox(string text, Vector2 center, float angle, Color boxColor, Color textColor)
+        {
+            var textSize = MeasureTextEx(GetFontDefault(), text, 16, 1);
+            var rectSize = textSize + new Vector2(10 + Constants.WireWidth);
+            var innerRectSize = rectSize - new Vector2(Constants.WireWidth);
+            DrawRectanglePro(new Rectangle(center, rectSize), rectSize * 0.5f, angle, boxColor);
+            DrawRectanglePro(new Rectangle(center, innerRectSize), innerRectSize * 0.5f, angle, Constants.BackgroundColor);
+            DrawTextPro(GetFontDefault(),
+                        text,
+                        center,
+                        textSize * 0.5f,
+                        angle,
+                        16,
+                        1,
+                        textColor);
+        }
     }
 }

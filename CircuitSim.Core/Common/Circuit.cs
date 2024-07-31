@@ -126,5 +126,15 @@ namespace CircuitSim.Core.Common
 
             Wires.Remove(hovered);
         }
+
+        public static Circuit FromTemplate(string templateName)
+        {
+            if (!File.Exists($"Templates/{templateName}.json"))
+                return new();
+
+            var template = File.ReadAllText($"Templates/{templateName}.json");
+            return DeserializeFromJson(template);
+
+        }
     }
 }
