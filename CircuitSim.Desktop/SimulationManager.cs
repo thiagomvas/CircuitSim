@@ -12,6 +12,7 @@ namespace CircuitSim.Desktop
     internal class SimulationManager
     {
         private static SimulationManager instance;
+        public Circuit Circuit { get; private set; }
 
         /// <summary>
         /// Gets the singleton instance of the SimulationManager.
@@ -28,16 +29,21 @@ namespace CircuitSim.Desktop
 
         private SimulationManager()
         {
+            Circuit = new();
         }
 
         private double maxVoltage = 1;
         private bool isDrawing = false;
         private Vector2 wireStart;
         private const float GridSize = 20.0f; // Define the grid size
-        public List<Wire> Wires { get; set; } = new();
         public Wire? Hovered = null;
         private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
+        
+        public void UseCircuit(Circuit circuit)
+        {
+            this.Circuit = circuit;
+        }
 
         /// <summary>
         /// Updates the simulation state.
@@ -80,7 +86,7 @@ namespace CircuitSim.Desktop
             else
             {
                 Hovered = null;
-                foreach (var wire in Wires)
+                foreach (var wire in Circuit.Wires)
                 {
                     if (wire.Voltage > maxVoltage)
                         maxVoltage = wire.Voltage;
@@ -93,14 +99,16 @@ namespace CircuitSim.Desktop
             }
             if (IsKeyPressed(KeyboardKey.F))
             {
-                foreach (var wire in Wires)
+                foreach (var wire in Circuit.Wires)
                     if (wire.GetType() == typeof(VoltageSource))
                         wire.Flow();
             }
             if (IsKeyPressed(KeyboardKey.R))
             {
-                Wires.Clear();
+                Circuit.Wires.Clear();
             }
+            if (IsKeyPressed(KeyboardKey.J))
+                Console.WriteLine(Circuit.SerializeToJson());
         }
 
         /// <summary>
@@ -120,7 +128,8 @@ namespace CircuitSim.Desktop
             DrawText("R - Reset", 10, 190, 20, Color.RayWhite);
             DrawText($"Selected = {WireType.Name}", 10, 220, 20, Color.RayWhite);
             DrawText($"Max: {maxVoltage}V", 10, 250, 20, Color.RayWhite);
-            foreach (var wire in Wires)
+            DrawText("J - Serialize", 10, 280, 20, Color.RayWhite);
+            foreach (var wire in Circuit.Wires)
             {
                 WireRenderer.Render(wire, GetColor(wire));
             }
@@ -164,26 +173,8 @@ namespace CircuitSim.Desktop
             {
                 newWire = new Wire { Start = wireStart, End = wireEnd };
             }
-            Wires.Add(newWire);
-            System.Console.WriteLine("Created Wire");
-
-            // Connect to other wires if endpoints match
-            foreach (var wire in Wires)
-            {
-                if (wire != newWire)
-                {
-                    if (wire.End == newWire.Start)
-                    {
-                        wire.Outputs.Add(newWire);
-                        newWire.Inputs.Add(wire);
-                    }
-                    if (wire.Start == newWire.End)
-                    {
-                        newWire.Outputs.Add(wire);
-                        wire.Inputs.Add(newWire);
-                    }
-                }
-            }
+            Circuit.AddWire(newWire);
+            
         }
     }
 }

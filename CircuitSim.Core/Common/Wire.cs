@@ -22,12 +22,12 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets the voltage across the wire after flow computation.
         /// </summary>
-        public double Voltage { get; private set; } = 0;
+        [JsonIgnore] public double Voltage { get; private set; } = 0;
 
         /// <summary>
         /// Gets the current flowing through the wire after flow computation.
         /// </summary>
-        public double Current { get; private set; } = 0;
+        [JsonIgnore] public double Current { get; private set; } = 0;
 
         /// <summary>
         /// Gets or sets the resistance of the wire.
