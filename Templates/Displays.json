@@ -1,0 +1,174 @@
+{
+  "Wires": [
+    {
+      "Type": "CircuitSim.Core.Components.VoltageSource, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "SupplyVoltage": 10.0,
+        "Resistance": 0.0,
+        "Start": {
+          "X": 340.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 520.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 520.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 560.0,
+          "Y": 340.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 520.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 560.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 520.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 560.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ammeter, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 560.0,
+          "Y": 340.0
+        },
+        "End": {
+          "X": 680.0,
+          "Y": 340.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Voltmeter, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 560.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 680.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ohmeter, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "CircuitResistance": 1.0,
+        "Resistance": 0.0,
+        "Start": {
+          "X": 560.0,
+          "Y": 420.0
+        },
+        "End": {
+          "X": 680.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 680.0,
+          "Y": 420.0
+        },
+        "End": {
+          "X": 720.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 680.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 720.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 680.0,
+          "Y": 340.0
+        },
+        "End": {
+          "X": 720.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Resistor, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 1.0,
+        "Start": {
+          "X": 720.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 840.0,
+          "Y": 380.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ground, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 840.0,
+          "Y": 380.0
+        },
+        "End": {
+          "X": 920.0,
+          "Y": 380.0
+        }
+      }
+    }
+  ]
+}

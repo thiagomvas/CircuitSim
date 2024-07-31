@@ -76,6 +76,27 @@ namespace CircuitSim.Desktop
                 WireType = typeof(Ground);
             if (IsKeyPressed(KeyboardKey.L))
                 WireType = typeof(LED);
+            if (IsKeyPressed(KeyboardKey.A))
+                WireType = typeof(Ammeter);
+            if (IsKeyPressed(KeyboardKey.V))
+                WireType = typeof(Voltmeter);
+            if (IsKeyPressed(KeyboardKey.O))
+                WireType = typeof(Ohmeter);
+
+
+
+            if (IsKeyPressed(KeyboardKey.F))
+            {
+                foreach (var wire in Circuit.Wires)
+                    if (wire.GetType() == typeof(VoltageSource))
+                        wire.Flow();
+            }
+            if (IsKeyPressed(KeyboardKey.R))
+            {
+                Circuit.Wires.Clear();
+            }
+            if (IsKeyPressed(KeyboardKey.J))
+                Console.WriteLine(Circuit.SerializeToJson());
 
             if (IsMouseButtonPressed(MouseButton.Left))
             {
@@ -110,18 +131,6 @@ namespace CircuitSim.Desktop
                     }
                 }
             }
-            if (IsKeyPressed(KeyboardKey.F))
-            {
-                foreach (var wire in Circuit.Wires)
-                    if (wire.GetType() == typeof(VoltageSource))
-                        wire.Flow();
-            }
-            if (IsKeyPressed(KeyboardKey.R))
-            {
-                Circuit.Wires.Clear();
-            }
-            if (IsKeyPressed(KeyboardKey.J))
-                Console.WriteLine(Circuit.SerializeToJson());
         }
 
         /// <summary>
