@@ -1,38 +1,33 @@
 ﻿using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
+using System.Numerics;
 
-var root = new VoltageSource() { Voltage = 5 };
-var resistor = new Resistor() { Resistance = 10 };
-var resistor2 = new Resistor() { Resistance = 10 };
-var wire1 = new Wire();
-var wire2 = new Wire();
-var wire3 = new Wire();
-var wire4 = new Wire();
-root.Outputs.Add(wire1);
-wire1.Outputs.Add(resistor);
-resistor.Outputs.Add(wire2);
+Circuit circuit = new();
+circuit.Wires.Add(new VoltageSource() { SupplyVoltage = 10, Start = Vector2.Zero, End = new(1, 0) });
+circuit.Wires.Add(new Resistor() { Resistance = 1000, Start = new(1, 0), End = new(1, 1) });
+circuit.Wires.Add(new Wire() { Start = new(1, 1), End = new(2, 1) });
 
-root.Outputs.Add(wire3);
-wire3.Outputs.Add(resistor2);
-resistor2.Outputs.Add(wire4);
+var json = circuit.SerializeToJson();
 
-Console.WriteLine($"Source: {root}");
-Console.WriteLine($"Resistor: {resistor}");
-Console.WriteLine($"Wire: {wire1}");
-Console.WriteLine($"Resistor2: {resistor2}");
-Console.WriteLine($"Wire2: {wire2}");
-Console.WriteLine($"Total Res: {root.GetCircuitResistance()}");
-Console.WriteLine($"Wire1 Res: {wire1.GetCircuitResistance()}");
-Console.WriteLine($"Wire2 Res: {wire2.GetCircuitResistance()}");
+Console.WriteLine(json);
 
+var deserialized = Circuit.DeserializeFromJson(json);
 
-root.Flow();
-Console.WriteLine("======================================");
-Console.WriteLine($"Source: {root}");
-Console.WriteLine($"Resistor: {resistor}");
-Console.WriteLine($"Wire: {wire1}");
-Console.WriteLine($"Wire2: {wire2}");
-Console.WriteLine();
-Console.WriteLine($"Wire3: {wire3}");
-Console.WriteLine($"Resistor2: {resistor2}");
-Console.WriteLine($"Wire4: {wire4}");
+foreach (var wire in deserialized.Wires)
+{
+    var type = wire.GetType();
+    if (type == typeof(VoltageSource))
+    {
+        var vs = (VoltageSource)wire;
+        Console.WriteLine($"Voltage Source: {vs.SupplyVoltage}V");
+    }
+    else if (type == typeof(Resistor))
+    {
+        var res = (Resistor)wire;
+        Console.WriteLine($"Resistor: {res.Resistance} Ohms");
+    }
+    else if (type == typeof(Wire))
+    {
+        Console.WriteLine("Wire");
+    }
+}
