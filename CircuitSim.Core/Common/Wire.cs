@@ -85,6 +85,14 @@ namespace CircuitSim.Core.Common
             Outputs = new List<Wire>();
         }
 
+        public void Reset()
+        {
+            PreFlowVoltage = 0;
+            PreFlowCurrent = 0;
+            Voltage = 0;
+            Current = 0;
+        }
+
         /// <summary>
         /// Adds the specified voltage to the pre-flow voltage of the wire.
         /// </summary>

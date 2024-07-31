@@ -7,6 +7,10 @@ namespace CircuitSim.Core.Components
     /// </summary>
     public class Resistor : Wire
     {
+        public Resistor()
+        {
+            Resistance = 1000;
+        }
         /// <inheritdoc/>
         public override void Flow()
         {

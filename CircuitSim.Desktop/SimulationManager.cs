@@ -60,15 +60,15 @@ namespace CircuitSim.Desktop
         /// </summary>
         public void Update()
         {
-            if (IsKeyPressed(KeyboardKey.One))
+            if (IsKeyPressed(KeyboardKey.W))
             {
                 WireType = typeof(Wire);
             }
-            if (IsKeyPressed(KeyboardKey.Two))
+            if (IsKeyPressed(KeyboardKey.R))
             {
                 WireType = typeof(Resistor);
             }
-            if (IsKeyPressed(KeyboardKey.Three))
+            if (IsKeyPressed(KeyboardKey.S))
             {
                 WireType = typeof(VoltageSource);
             }
@@ -82,17 +82,20 @@ namespace CircuitSim.Desktop
                 WireType = typeof(Voltmeter);
             if (IsKeyPressed(KeyboardKey.O))
                 WireType = typeof(Ohmeter);
-
+            if(IsKeyPressed(KeyboardKey.Delete))
+            {
+                if (Hovered != null)
+                    Circuit.RemoveWire(Hovered);
+            }
 
             if (IsKeyPressed(KeyboardKey.F))
             {
                 foreach (var wire in Circuit.Wires)
+                    wire.Reset();
+
+                foreach (var wire in Circuit.Wires)
                     if (wire.GetType() == typeof(VoltageSource))
                         wire.Flow();
-            }
-            if (IsKeyPressed(KeyboardKey.R))
-            {
-                Circuit.Wires.Clear();
             }
             if (IsKeyPressed(KeyboardKey.J))
                 Console.WriteLine(Circuit.SerializeToJson());
@@ -196,7 +199,7 @@ namespace CircuitSim.Desktop
             Wire newWire;
             if (WireType == typeof(Resistor))
             {
-                newWire = new Resistor { Start = wireStart, End = wireEnd, Resistance = 1 };
+                newWire = new Resistor { Start = wireStart, End = wireEnd};
             }
             else if (WireType == typeof(VoltageSource))
             {

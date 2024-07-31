@@ -160,7 +160,7 @@ namespace CircuitSim.Desktop
             var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
 
             DrawLineEx(wire.Start, wire.End - wire.Direction * 20, Constants.WireWidth, color);
-            Utils.DrawCurrent(wire.Start, wire.End, wire);
+            Utils.DrawCurrent(wire.Start, wire.End - wire.Direction * 20, wire);
 
             DrawLineEx(wire.End - wire.Direction * 20 + normal * 20, wire.End - wire.Direction * 20 - normal * 20, Constants.WireWidth, color);
 
