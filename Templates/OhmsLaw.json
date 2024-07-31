@@ -1,0 +1,131 @@
+{
+  "Wires": [
+    {
+      "Type": "CircuitSim.Core.Components.VoltageSource, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "SupplyVoltage": 10.0,
+        "Resistance": 0.0,
+        "Start": {
+          "X": 380.0,
+          "Y": 480.0
+        },
+        "End": {
+          "X": 540.0,
+          "Y": 480.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 540.0,
+          "Y": 480.0
+        },
+        "End": {
+          "X": 540.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Common.Wire, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 540.0,
+          "Y": 480.0
+        },
+        "End": {
+          "X": 540.0,
+          "Y": 540.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Resistor, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 1000.0,
+        "Start": {
+          "X": 540.0,
+          "Y": 540.0
+        },
+        "End": {
+          "X": 760.0,
+          "Y": 540.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Resistor, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 100.0,
+        "Start": {
+          "X": 540.0,
+          "Y": 420.0
+        },
+        "End": {
+          "X": 760.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ammeter, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 760.0,
+          "Y": 420.0
+        },
+        "End": {
+          "X": 860.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ammeter, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 760.0,
+          "Y": 540.0
+        },
+        "End": {
+          "X": 860.0,
+          "Y": 540.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ground, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 860.0,
+          "Y": 420.0
+        },
+        "End": {
+          "X": 940.0,
+          "Y": 420.0
+        }
+      }
+    },
+    {
+      "Type": "CircuitSim.Core.Components.Ground, CircuitSim.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Data": {
+        "Resistance": 0.0,
+        "Start": {
+          "X": 860.0,
+          "Y": 540.0
+        },
+        "End": {
+          "X": 940.0,
+          "Y": 540.0
+        }
+      }
+    }
+  ]
+}
