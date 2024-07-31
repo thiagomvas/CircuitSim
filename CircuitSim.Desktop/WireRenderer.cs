@@ -1,10 +1,9 @@
-﻿using CircuitSim.Core.Common;
-using static Raylib_cs.Raylib;
+﻿using CircuitSim.Core;
+using CircuitSim.Core.Common;
 using Raylib_cs;
 using System.Numerics;
 using System.Reflection;
-using CircuitSim.Core;
-using System.ComponentModel;
+using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
 {
@@ -111,10 +110,10 @@ namespace CircuitSim.Desktop
 
         private static void RenderLED(Wire wire, Color color)
         {
-            LED led = (LED) wire;
+            LED led = (LED)wire;
             DrawLineEx(wire.Start, wire.Center - wire.Direction * 20, Constants.WireWidth, color);
             DrawCircleV(wire.Center, 20, Utils.SystemDrawingColorToRaylib(led.LitColor));
-            if(!led.IsOn)
+            if (!led.IsOn)
                 DrawCircleV(wire.Center, 20 - Constants.WireWidth, Constants.BackgroundColor);
             DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
         }

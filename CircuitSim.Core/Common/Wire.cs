@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using CircuitSim.Core.DTOs;
+using Newtonsoft.Json;
+using System.Numerics;
 
 namespace CircuitSim.Core.Common
 {
@@ -10,22 +12,22 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets or sets the pre-flow voltage of the wire.
         /// </summary>
-        public double PreFlowVoltage = 0;
+        [JsonIgnore] public double PreFlowVoltage = 0;
 
         /// <summary>
         /// Gets or sets the pre-flow current of the wire.
         /// </summary>
-        public double PreFlowCurrent = 0;
+        [JsonIgnore] public double PreFlowCurrent = 0;
 
         /// <summary>
         /// Gets the voltage across the wire after flow computation.
         /// </summary>
-        public double Voltage { get; private set; } = 0;
+        [JsonIgnore] public double Voltage { get; private set; } = 0;
 
         /// <summary>
         /// Gets the current flowing through the wire after flow computation.
         /// </summary>
-        public double Current { get; private set; } = 0;
+        [JsonIgnore] public double Current { get; private set; } = 0;
 
         /// <summary>
         /// Gets or sets the resistance of the wire.
@@ -47,32 +49,32 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets the center position of the wire.
         /// </summary>
-        public Vector2 Center { get; private set; }
+        [JsonIgnore] public Vector2 Center { get; private set; }
 
         /// <summary>
         /// Gets the direction of the wire.
         /// </summary>
-        public Vector2 Direction { get; private set; }
+        [JsonIgnore] public Vector2 Direction { get; private set; }
 
         /// <summary>
         /// Gets the length of the wire.
         /// </summary>
-        public float Length { get; private set; }
+        [JsonIgnore] public float Length { get; private set; }
 
         /// <summary>
         /// Gets the angle of the wire in degrees.
         /// </summary>
-        public float AngleDeg { get; private set; }
+        [JsonIgnore] public float AngleDeg { get; private set; }
 
         /// <summary>
         /// Gets or sets the list of input wires connected to this wire.
         /// </summary>
-        public List<Wire> Inputs { get; set; }
+        [JsonIgnore] public List<Wire> Inputs { get; set; }
 
         /// <summary>
         /// Gets or sets the list of output wires connected to this wire.
         /// </summary>
-        public List<Wire> Outputs { get; set; }
+        [JsonIgnore] public List<Wire> Outputs { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Wire"/> class.
@@ -132,15 +134,21 @@ namespace CircuitSim.Core.Common
         {
             DefaultFlow();
         }
-
         protected void DefaultFlow(double voltageAddition = 0, double currentAddition = 0)
         {
             Voltage = PreFlowVoltage;
-            Current = PreFlowCurrent;
+
+            if (Inputs.Count > 1)
+                Current = Inputs.Sum(w => w.Current); // If multiple inputs, use the sum regardless
+            else
+                Current = PreFlowCurrent;
+
             PreFlowVoltage = 0;
             PreFlowCurrent = 0;
             Voltage = Math.Max(0, Voltage);
             Current = Math.Max(0, Current);
+
+
 
             if (Outputs.Count == 1)
             {
@@ -153,6 +161,7 @@ namespace CircuitSim.Core.Common
             }
             else
             {
+
                 var totalResistance = GetCircuitResistance();
                 foreach (var output in Outputs)
                 {
@@ -202,6 +211,15 @@ namespace CircuitSim.Core.Common
         public override string ToString()
         {
             return $"{Voltage}V - {Current}A - {Resistance}Ohm";
+        }
+
+        internal WireDTO ToDTO()
+        {
+            return new()
+            {
+                Type = this.GetType(),
+                Data = this
+            };
         }
     }
 }
