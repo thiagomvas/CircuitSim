@@ -9,6 +9,27 @@ namespace CircuitSim.Core.Common
     {
         public List<Wire> Wires { get; set; } = new List<Wire>();
 
+        public void AddWire(Wire newWire)
+        {
+            foreach (var wire in Wires)
+            {
+                if (wire != newWire)
+                {
+                    if (wire.End == newWire.Start)
+                    {
+                        wire.Outputs.Add(newWire);
+                        newWire.Inputs.Add(wire);
+                    }
+                    if (wire.Start == newWire.End)
+                    {
+                        newWire.Outputs.Add(wire);
+                        wire.Inputs.Add(newWire);
+                    }
+                }
+            }
+            Wires.Add(newWire);
+        }
+
         public string SerializeToJson()
         {
             var entity = new JObject();
@@ -32,7 +53,7 @@ namespace CircuitSim.Core.Common
                 var props = type.GetProperties();
 
                 // Creating an instance of that type
-                var instance = Activator.CreateInstance(type);
+                var wireInstance = Activator.CreateInstance(type);
 
                 // Defining the properties of the instance using Reflection
                 foreach (var prop in wire["Data"] as JObject)
@@ -41,13 +62,14 @@ namespace CircuitSim.Core.Common
                     {
                         var propInfo = props.First(p => p.Name == prop.Key);
                         if(propInfo.CanWrite)
-                            propInfo.SetValue(instance, prop.Value.ToObject(propInfo.PropertyType));
+                            propInfo.SetValue(wireInstance, prop.Value.ToObject(propInfo.PropertyType));
                     }
                 }
                 
                 // After all that headache, add to the circuit.
-                circuit.Wires.Add((Wire) instance);
+                circuit.AddWire((Wire) wireInstance);
             }
+
             return circuit;
         }
 
