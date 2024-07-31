@@ -1,5 +1,6 @@
 ﻿using CircuitSim.Core;
 using CircuitSim.Core.Common;
+using CircuitSim.Core.Components;
 using Raylib_cs;
 using System.Numerics;
 using System.Reflection;
@@ -150,6 +151,41 @@ namespace CircuitSim.Desktop
 
             DrawLineEx(wire.End + normal * 4, wire.End - normal * 4, Constants.WireWidth, color);
 
+        }
+
+        private static void RenderVoltmeter(Wire wire, Color color)
+        {
+            string txt = $"{wire.Voltage:0.00}V";
+            var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
+            DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
+            DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);
+
+            DrawTextPro(GetFontDefault(),
+                        txt,
+                        wire.Center,
+                        textSize * 0.5f,
+                        wire.AngleDeg,
+                        16,
+                        1,
+                        Color.White);
+        }
+
+        private static void RenderOhmeter(Wire wire, Color color)
+        {
+            var ohmeter = (Ohmeter)wire;
+            string txt = $"{ohmeter.CircuitResistance:0.00} Ohms";
+            var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
+            DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
+            DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);
+
+            DrawTextPro(GetFontDefault(),
+                        txt,
+                        wire.Center,
+                        textSize * 0.5f,
+                        wire.AngleDeg,
+                        16,
+                        1,
+                        Color.White);
         }
     }
 }
