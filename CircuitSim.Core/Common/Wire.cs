@@ -22,12 +22,12 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets the voltage across the wire after flow computation.
         /// </summary>
-        [JsonIgnore] public double Voltage { get; private set; } = 0;
+        [JsonIgnore] public double Voltage { get; protected set; } = 0;
 
         /// <summary>
         /// Gets the current flowing through the wire after flow computation.
         /// </summary>
-        [JsonIgnore] public double Current { get; private set; } = 0;
+        [JsonIgnore] public double Current { get; protected set; } = 0;
 
         /// <summary>
         /// Gets or sets the resistance of the wire.
@@ -148,8 +148,6 @@ namespace CircuitSim.Core.Common
             Voltage = Math.Max(0, Voltage);
             Current = Math.Max(0, Current);
 
-
-
             if (Outputs.Count == 1)
             {
                 var @out = Outputs[0];
@@ -161,21 +159,56 @@ namespace CircuitSim.Core.Common
             }
             else
             {
-
-                var totalResistance = GetCircuitResistance();
-                foreach (var output in Outputs)
+                double totalResistance = GetCircuitResistance();
+                if (totalResistance <= 0)
                 {
-                    output.AddVoltage(Voltage + voltageAddition);
+                    // Handle case where total resistance is zero or negative which might occur in ideal cases
+                    foreach (var output in Outputs)
+                    {
+                        output.AddVoltage(Voltage + voltageAddition);
+                        output.AddCurrent(Current / Outputs.Count + currentAddition);
+                        output.Flow();
+                    }
+                }
+                else
+                {
+                    // Calculate current division based on individual resistances
+                    double totalInverseResistance = 0;
+                    foreach (var output in Outputs)
+                    {
+                        var outputResistance = output.GetCircuitResistance();
+                        if (outputResistance > 0)
+                        {
+                            totalInverseResistance += 1 / outputResistance;
+                        }
+                    }
 
-                    output.AddCurrent(Current * (totalResistance / output.GetCircuitResistance()) + currentAddition);
-
-                    output.Flow();
+                    foreach (var output in Outputs)
+                    {
+                        double outputResistance = output.GetCircuitResistance();
+                        double currentFraction = 0;
+                        if (outputResistance > 0 && totalInverseResistance > 0)
+                        {
+                            currentFraction = (1 / outputResistance) / totalInverseResistance;
+                        }
+                        output.AddVoltage(Voltage + voltageAddition);
+                        output.AddCurrent(Current * currentFraction + currentAddition);
+                        output.Flow();
+                    }
                 }
             }
         }
 
-        protected double GetCircuitResistance()
+
+        public double GetCircuitResistance(HashSet<Wire> visitedWires = null)
         {
+            if (visitedWires == null)
+                visitedWires = new HashSet<Wire>();
+
+            // Avoid recalculating resistance for wires already processed
+            if (!visitedWires.Add(this))
+                return 0;
+
             double result = Resistance;
 
             if (Outputs.Count == 0)
@@ -185,14 +218,14 @@ namespace CircuitSim.Core.Common
 
             if (Outputs.Count == 1)
             {
-                result += Outputs[0].GetCircuitResistance();
+                result += Outputs[0].GetCircuitResistance(visitedWires);
             }
             else
             {
                 double inverseTotalResistance = 0;
                 foreach (var wire in Outputs)
                 {
-                    var res = wire.GetCircuitResistance();
+                    var res = wire.GetCircuitResistance(visitedWires);
                     if (res != 0)
                     {
                         inverseTotalResistance += 1 / res;
@@ -203,6 +236,7 @@ namespace CircuitSim.Core.Common
 
             return result;
         }
+
 
         /// <summary>
         /// Returns a string representation of the wire.
