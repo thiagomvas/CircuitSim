@@ -1,6 +1,8 @@
-﻿using CircuitSim.Core.Common;
+﻿using CircuitSim.Core;
+using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 using Raylib_cs;
+using System.ComponentModel.Design;
 using System.Numerics;
 using static Raylib_cs.Raylib;
 
@@ -70,6 +72,10 @@ namespace CircuitSim.Desktop
             {
                 WireType = typeof(VoltageSource);
             }
+            if (IsKeyPressed(KeyboardKey.G))
+                WireType = typeof(Ground);
+            if (IsKeyPressed(KeyboardKey.L))
+                WireType = typeof(LED);
 
             if (IsMouseButtonPressed(MouseButton.Left))
             {
@@ -89,7 +95,6 @@ namespace CircuitSim.Desktop
             {
                 var mousePos = SnapToGrid(GetMousePosition());
                 drawPreview.End = mousePos;
-                WireRenderer.Render(drawPreview, Color.RayWhite);
             }
             else
             {
@@ -124,6 +129,16 @@ namespace CircuitSim.Desktop
         /// </summary>
         public void Draw()
         {
+
+            for (int i = 0; i < GetScreenWidth(); i += (int)GridSize)
+            {
+                DrawLine(i, 0, i, GetScreenHeight(), Constants.GridColor);
+            }
+            for (int i = 0; i < GetScreenHeight(); i += (int)GridSize)
+            {
+                DrawLine(0, i, GetScreenWidth(), i, Constants.GridColor);
+            }
+
             if (Hovered != null)
             {
                 DrawText($"Voltage: {Hovered.Voltage}V", 10, 10, 20, Color.RayWhite);
@@ -141,6 +156,8 @@ namespace CircuitSim.Desktop
             {
                 WireRenderer.Render(wire, GetColor(wire));
             }
+            if(isDrawing)
+                WireRenderer.Render(drawPreview, Color.RayWhite);
         }
 
         private Color GetColor(Wire wire)
@@ -179,7 +196,9 @@ namespace CircuitSim.Desktop
             }
             else
             {
-                newWire = new Wire { Start = wireStart, End = wireEnd };
+                newWire = (Wire) Activator.CreateInstance(WireType)!;
+                newWire.Start = wireStart;
+                newWire.End = wireEnd;
             }
             Circuit.AddWire(newWire);
 
