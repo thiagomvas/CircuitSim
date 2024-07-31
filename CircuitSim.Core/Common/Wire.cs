@@ -134,15 +134,21 @@ namespace CircuitSim.Core.Common
         {
             DefaultFlow();
         }
-
         protected void DefaultFlow(double voltageAddition = 0, double currentAddition = 0)
         {
             Voltage = PreFlowVoltage;
-            Current = PreFlowCurrent;
+
+            if (Inputs.Count > 1)
+                Current = Inputs.Sum(w => w.Current); // If multiple inputs, use the sum regardless
+            else
+                Current = PreFlowCurrent;
+
             PreFlowVoltage = 0;
             PreFlowCurrent = 0;
             Voltage = Math.Max(0, Voltage);
             Current = Math.Max(0, Current);
+
+
 
             if (Outputs.Count == 1)
             {
@@ -155,6 +161,7 @@ namespace CircuitSim.Core.Common
             }
             else
             {
+                
                 var totalResistance = GetCircuitResistance();
                 foreach (var output in Outputs)
                 {
