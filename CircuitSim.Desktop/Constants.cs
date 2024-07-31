@@ -10,6 +10,10 @@ namespace CircuitSim.Desktop
         /// </summary>
         public const float WireWidth = 4;
 
+        public const float CurrentBallRadius = 5;
+
+        public static float CurrentSpeedScale = 1000;
+
         /// <summary>
         /// The background color.
         /// </summary>

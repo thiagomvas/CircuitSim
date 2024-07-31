@@ -84,7 +84,6 @@ namespace CircuitSim.Desktop
                 WireType = typeof(Ohmeter);
 
 
-
             if (IsKeyPressed(KeyboardKey.F))
             {
                 foreach (var wire in Circuit.Wires)
@@ -150,8 +149,8 @@ namespace CircuitSim.Desktop
 
             if (Hovered != null)
             {
-                DrawText($"Voltage: {Hovered.Voltage}V", 10, 10, 20, Color.RayWhite);
-                DrawText($"Current: {Hovered.Current}A", 10, 40, 20, Color.RayWhite);
+                DrawText($"Voltage: {Hovered.Voltage:0.00000}V", 10, 10, 20, Color.RayWhite);
+                DrawText($"Current: {Hovered.Current:0.00000}A", 10, 40, 20, Color.RayWhite);
             }
             DrawText("1 - Wire", 10, 70, 20, Color.RayWhite);
             DrawText("2 - Resistor", 10, 100, 20, Color.RayWhite);

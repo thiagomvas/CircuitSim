@@ -55,6 +55,8 @@ namespace CircuitSim.Desktop
         /// <param name="color">The color of the wire</param>
         public static void Render(Wire wire, Color color)
         {
+
+            
             var type = wire.GetType();
             if (RenderActions.TryGetValue(type, out var renderAction))
             {
@@ -64,11 +66,15 @@ namespace CircuitSim.Desktop
             {
                 RenderWire(wire, color);
             }
+
+
         }
 
         private static void RenderWire(Wire wire, Color color)
         {
+
             DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
         }
 
         private static void RenderResistor(Wire wire, Color color)
@@ -76,6 +82,8 @@ namespace CircuitSim.Desktop
             var rectSize = new Vector2(wire.Length * 0.5f, 50);
             var innerRectSize = new Vector2(wire.Length * 0.5f - Constants.WireWidth, 50 - Constants.WireWidth);
             DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
+
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
             DrawRectanglePro(new Rectangle(wire.Center, rectSize), rectSize / 2, wire.AngleDeg, color);
             DrawRectanglePro(new Rectangle(wire.Center, innerRectSize), innerRectSize / 2, wire.AngleDeg, Constants.BackgroundColor);
             string txt = $"{wire.Resistance} Ohms";
@@ -96,6 +104,8 @@ namespace CircuitSim.Desktop
 
             Vector2 pos = wire.Start + wire.Direction * wire.Length * 0.5f;
             DrawLineEx(wire.Center, wire.End, Constants.WireWidth, color);
+
+            Utils.DrawCurrent(pos, wire.End, wire);
             DrawRectanglePro(new Rectangle(pos, rectSize), rectSize * 0.5f, wire.AngleDeg, color);
             DrawRectanglePro(new Rectangle(pos, innerRectSize), innerRectSize * 0.5f, wire.AngleDeg, Constants.BackgroundColor);
             string txt = $"{wire.Voltage:0.00}V";
@@ -113,10 +123,13 @@ namespace CircuitSim.Desktop
         {
             LED led = (LED)wire;
             DrawLineEx(wire.Start, wire.Center - wire.Direction * 20, Constants.WireWidth, color);
+            DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
+
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
+
             DrawCircleV(wire.Center, 20, Utils.SystemDrawingColorToRaylib(led.LitColor));
             if (!led.IsOn)
                 DrawCircleV(wire.Center, 20 - Constants.WireWidth, Constants.BackgroundColor);
-            DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
         }
 
         private static void RenderAmmeter(Wire wire, Color color)
@@ -129,6 +142,8 @@ namespace CircuitSim.Desktop
                 wire.Center - normal * 10,
                 wire.Center,
                 wire.End);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
+
             string txt = $"{wire.Current:0.00}A";
             DrawTextPro(GetFontDefault(),
                         txt,
@@ -145,6 +160,8 @@ namespace CircuitSim.Desktop
             var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
 
             DrawLineEx(wire.Start, wire.End - wire.Direction * 20, Constants.WireWidth, color);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
+
             DrawLineEx(wire.End - wire.Direction * 20 + normal * 20, wire.End - wire.Direction * 20 - normal * 20, Constants.WireWidth, color);
 
             DrawLineEx(wire.End - wire.Direction * 10 + normal * 12, wire.End - wire.Direction * 10 - normal * 12, Constants.WireWidth, color);
@@ -159,6 +176,7 @@ namespace CircuitSim.Desktop
             var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
             DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
             DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
 
             DrawTextPro(GetFontDefault(),
                         txt,
@@ -177,6 +195,7 @@ namespace CircuitSim.Desktop
             var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
             DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
             DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
 
             DrawTextPro(GetFontDefault(),
                         txt,
