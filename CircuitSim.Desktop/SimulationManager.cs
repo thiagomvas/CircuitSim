@@ -138,10 +138,14 @@ namespace CircuitSim.Desktop
 
             if(Hovered != null)
             {
-                DrawText(Hovered.GetType().Name, 10, GetScreenHeight() - 120, 20, Color.RayWhite);
-                DrawText($"Voltage: {Hovered.Voltage:0.00000}V", 10, GetScreenHeight() - 90, 20, Color.RayWhite);
-                DrawText($"Current: {Hovered.Current:0.00000}A", 10, GetScreenHeight() - 60, 20, Color.RayWhite);
-                DrawText($"Resistance: {Hovered.Resistance:0.00000} Ohms", 10, GetScreenHeight() - 30, 20, Color.RayWhite);
+                var txt = $"{Hovered.GetType().Name}\n\nVoltage: {Hovered.Voltage:0.00000}V\n\nCurrent: {Hovered.Current:0.00000}A\n\nResistance: {Hovered.Resistance:0.00000} Ohms";
+                var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
+                Utils.DrawTextBox(txt,
+                    new Vector2(10, GetScreenHeight()) + new Vector2(textSize.X, -textSize.Y), 
+                    0, 
+                    Color.RayWhite, 
+                    Color.RayWhite,
+                    20);
 
             }
 

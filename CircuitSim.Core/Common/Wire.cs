@@ -151,6 +151,9 @@ namespace CircuitSim.Core.Common
             else
                 Current = PreFlowCurrent;
 
+            PreFlowCurrent = 0;
+            PreFlowVoltage = 0;
+
             Voltage = Math.Max(0, Voltage);
             Current = Math.Max(0, Current);
 
