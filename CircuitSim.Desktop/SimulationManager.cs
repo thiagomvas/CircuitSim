@@ -1,6 +1,7 @@
 ﻿using CircuitSim.Core;
 using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
+using CircuitSim.Desktop.Input;
 using Raylib_cs;
 using System.ComponentModel.Design;
 using System.Numerics;
@@ -19,6 +20,8 @@ namespace CircuitSim.Desktop
         /// Gets the circuit currently being rendered
         /// </summary>
         public Circuit Circuit { get; private set; }
+
+        private InputSystem _inputSystem;
 
         /// <summary>
         /// Gets the singleton instance of the SimulationManager.
@@ -45,6 +48,7 @@ namespace CircuitSim.Desktop
         public Wire? Hovered = null;
         private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
+        public bool ShowControls = false;
 
         /// <summary>
         /// Changes the circuit being rendered.
@@ -60,42 +64,12 @@ namespace CircuitSim.Desktop
         /// </summary>
         public void Update()
         {
-            if (IsKeyPressed(KeyboardKey.W))
+            if (_inputSystem == null)
+                _inputSystem = new();
+            var key = GetKeyPressed();
+            if(key != 0)
             {
-                WireType = typeof(Wire);
-            }
-            if (IsKeyPressed(KeyboardKey.R))
-            {
-                WireType = typeof(Resistor);
-            }
-            if (IsKeyPressed(KeyboardKey.S))
-            {
-                WireType = typeof(VoltageSource);
-            }
-            if (IsKeyPressed(KeyboardKey.G))
-                WireType = typeof(Ground);
-            if (IsKeyPressed(KeyboardKey.L))
-                WireType = typeof(LED);
-            if (IsKeyPressed(KeyboardKey.A))
-                WireType = typeof(Ammeter);
-            if (IsKeyPressed(KeyboardKey.V))
-                WireType = typeof(Voltmeter);
-            if (IsKeyPressed(KeyboardKey.O))
-                WireType = typeof(Ohmeter);
-            if(IsKeyPressed(KeyboardKey.Delete))
-            {
-                if (Hovered != null)
-                    Circuit.RemoveWire(Hovered);
-            }
-
-            if (IsKeyPressed(KeyboardKey.F))
-            {
-                foreach (var wire in Circuit.Wires)
-                    wire.Reset();
-
-                foreach (var wire in Circuit.Wires)
-                    if (wire.GetType() == typeof(VoltageSource))
-                        wire.Flow();
+                _inputSystem.CheckForInput((KeyboardKey)key);
             }
             if (IsKeyPressed(KeyboardKey.J))
                 Console.WriteLine(Circuit.SerializeToJson());
@@ -150,19 +124,27 @@ namespace CircuitSim.Desktop
                 DrawLine(0, i, GetScreenWidth(), i, Constants.GridColor);
             }
 
-            if (Hovered != null)
+            DrawText($"Selected: {WireType.Name}", 10, 10, 20, Color.RayWhite);
+
+            if (ShowControls)
             {
-                DrawText($"Voltage: {Hovered.Voltage:0.00000}V", 10, 10, 20, Color.RayWhite);
-                DrawText($"Current: {Hovered.Current:0.00000}A", 10, 40, 20, Color.RayWhite);
+                int i = 0;
+                foreach(var (_, mapping) in _inputSystem.Keymappings)
+                {
+                    DrawText($"[{mapping.Key}] - {mapping.Name}", 10, 40 + i * 30, 20, Color.RayWhite);
+                    i++;
+                }
             }
-            DrawText("1 - Wire", 10, 70, 20, Color.RayWhite);
-            DrawText("2 - Resistor", 10, 100, 20, Color.RayWhite);
-            DrawText("3 - Voltage Source", 10, 130, 20, Color.RayWhite);
-            DrawText("F - Flow", 10, 160, 20, Color.RayWhite);
-            DrawText("R - Reset", 10, 190, 20, Color.RayWhite);
-            DrawText($"Selected = {WireType.Name}", 10, 220, 20, Color.RayWhite);
-            DrawText($"Max: {maxVoltage}V", 10, 250, 20, Color.RayWhite);
-            DrawText("J - Serialize", 10, 280, 20, Color.RayWhite);
+
+            if(Hovered != null)
+            {
+                DrawText(Hovered.GetType().Name, 10, GetScreenHeight() - 120, 20, Color.RayWhite);
+                DrawText($"Voltage: {Hovered.Voltage:0.00000}V", 10, GetScreenHeight() - 90, 20, Color.RayWhite);
+                DrawText($"Current: {Hovered.Current:0.00000}A", 10, GetScreenHeight() - 60, 20, Color.RayWhite);
+                DrawText($"Resistance: {Hovered.Resistance:0.00000} Ohms", 10, GetScreenHeight() - 30, 20, Color.RayWhite);
+
+            }
+
             foreach (var wire in Circuit.Wires)
             {
                 WireRenderer.Render(wire, GetColor(wire));
@@ -213,6 +195,21 @@ namespace CircuitSim.Desktop
             }
             Circuit.AddWire(newWire);
 
+        }
+        public void DeleteHovered()
+        {
+            if (Hovered != null)
+                Circuit.RemoveWire(Hovered); 
+        }
+
+        public void BeginFlow()
+        {
+            foreach (var wire in Circuit.Wires)
+                wire.Reset();
+
+            foreach (var wire in Circuit.Wires)
+                if (wire.GetType() == typeof(VoltageSource))
+                    wire.Flow();
         }
     }
 }
