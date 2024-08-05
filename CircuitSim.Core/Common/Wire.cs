@@ -1,4 +1,5 @@
-﻿using CircuitSim.Core.DTOs;
+﻿using CircuitSim.Core.Annotations;
+using CircuitSim.Core.DTOs;
 using Newtonsoft.Json;
 using System.Numerics;
 
@@ -33,6 +34,7 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets or sets the resistance of the wire.
         /// </summary>
+        [PropertyEditable]
         public double Resistance { get; set; } = 0;
 
         private Vector2 start, end;

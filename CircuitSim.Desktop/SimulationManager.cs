@@ -5,6 +5,7 @@ using CircuitSim.Desktop.Input;
 using Raylib_cs;
 using System.ComponentModel.Design;
 using System.Numerics;
+using static CircuitSim.Desktop.UISystem;
 using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
@@ -22,6 +23,7 @@ namespace CircuitSim.Desktop
         public Circuit Circuit { get; private set; }
 
         private InputSystem _inputSystem;
+        private UISystem _uiSystem;
 
         /// <summary>
         /// Gets the singleton instance of the SimulationManager.
@@ -46,6 +48,7 @@ namespace CircuitSim.Desktop
         private Vector2 wireStart;
         private const float GridSize = 20.0f; // Define the grid size
         public Wire? Hovered = null;
+        public Wire? Selected = null;
         private Wire drawPreview = new();
         public Type WireType { get; set; } = typeof(Wire);
         public bool ShowControls = false;
@@ -64,8 +67,12 @@ namespace CircuitSim.Desktop
         /// </summary>
         public void Update()
         {
+            _uiSystem ??= new(GetScreenWidth(), GetScreenHeight());
             if (_inputSystem == null)
+            {
                 _inputSystem = new();
+                _uiSystem.AddDrawer(_inputSystem.Keymappings.Select(kvp => new DrawerButton(kvp.Value.Name, () => _inputSystem.CheckForInput(kvp.Key))).ToArray());
+            }
             var key = GetKeyPressed();
             if(key != 0)
             {
@@ -85,7 +92,8 @@ namespace CircuitSim.Desktop
             {
                 isDrawing = false;
                 var wireEnd = SnapToGrid(GetMousePosition());
-                CreateWire(wireEnd);
+                if(wireStart != wireEnd)
+                    CreateWire(wireEnd);
             }
 
             if (isDrawing)
@@ -107,6 +115,12 @@ namespace CircuitSim.Desktop
                     }
                 }
             }
+            if(IsMouseButtonPressed(MouseButton.Right))
+            {
+                Selected = Hovered;
+                _uiSystem.SelectWire(Selected);
+            }
+
         }
 
         /// <summary>
@@ -124,7 +138,7 @@ namespace CircuitSim.Desktop
                 DrawLine(0, i, GetScreenWidth(), i, Constants.GridColor);
             }
 
-            DrawText($"Selected: {WireType.Name}", 10, 10, 20, Color.RayWhite);
+            DrawText($"Selected: {WireType.Name}", 10, Raylib.GetScreenHeight() - 20, 20, Color.RayWhite);
 
             if (ShowControls)
             {
@@ -155,6 +169,12 @@ namespace CircuitSim.Desktop
             }
             if(isDrawing)
                 WireRenderer.Render(drawPreview, Color.RayWhite);
+
+            _uiSystem.DrawUI();
+            if (Selected != null)
+            {
+                _uiSystem.DrawPropertyInputFields();
+            }
         }
 
         private Color GetColor(Wire wire)
