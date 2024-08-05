@@ -45,19 +45,21 @@ namespace CircuitSim.Desktop
             {
                 string drawerTxt = "Drawer " + i;
                 int drawerWidth = Raylib.MeasureText(drawerTxt, 20);
-                Raylib.DrawRectangle(10 + i * 100, 10, drawerWidth, 40, Color.DarkGray);
-                Raylib.DrawText("Drawer " + i, 10 + i * 100, 10, 20, Color.White);
+                var rect = new Rectangle(i * 100, 0, drawerWidth + 20, 40);
+                DrawButton(rect, drawerTxt);
                 // Check if is hovering drawer 
-                if (Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), new Rectangle(10 + i * 100, 10, drawerWidth, 40)) &&
-                                      Raylib.IsMouseButtonPressed(MouseButton.Left))
+                if (Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), rect))
                 {
-                    if(selectedDrawer == i)
+                    if(Raylib.IsMouseButtonPressed(MouseButton.Left))
                     {
-                        selectedDrawer = -1;
-                    }
-                    else
-                    {
-                        selectedDrawer = i;
+                        if (selectedDrawer == i)
+                        {
+                            selectedDrawer = -1;
+                        }
+                        else
+                        {
+                            selectedDrawer = i;
+                        }
                     }
                 }
 
@@ -66,8 +68,9 @@ namespace CircuitSim.Desktop
                     for (int j = 0; j < drawers[i].Length; j++)
                     {
                         var width = Raylib.MeasureText(drawers[i][j].Text, 20) + 20;
-                        DrawButton(10 + i * 100, 50 + j * 50, width, 40, drawers[i][j].Text);
-                        if(Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), new Rectangle(10 + i * 100, 50 + j * 50, width, 40)) &&
+                        var rect2 = new Rectangle(10 + i * 100, 50 + j * 40, width, 40);
+                        DrawButton(rect2, drawers[i][j].Text);
+                        if(Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), rect2) &&
                                                        Raylib.IsMouseButtonPressed(MouseButton.Left))
                         {
                             drawers[i][j].Action();
@@ -78,6 +81,15 @@ namespace CircuitSim.Desktop
 
         }
 
+        public void DrawButton(Rectangle rect, string text)
+        {
+            Raylib.DrawRectangleRec(rect, Constants.BackgroundColor);
+            Raylib.DrawText(text, (int)rect.X + 10, (int)rect.Y + 5, 20, Color.White);
+            if(Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), rect))
+            {
+                Raylib.DrawRectangleLinesEx(rect, Constants.GridLineWidth, Constants.GridColor);
+            }
+        }
         public void DrawButton(int x, int y, int width, int height, string text)
         {
             Rectangle button = new Rectangle(x, y, width, height);

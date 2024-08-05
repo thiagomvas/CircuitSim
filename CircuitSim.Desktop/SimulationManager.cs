@@ -5,6 +5,8 @@ using CircuitSim.Desktop.Input;
 using Raylib_cs;
 using System.ComponentModel.Design;
 using System.Numerics;
+using TMath;
+using TMath.Numerics.AdvancedMath;
 using static CircuitSim.Desktop.UISystem;
 using static Raylib_cs.Raylib;
 
@@ -46,7 +48,6 @@ namespace CircuitSim.Desktop
         private double maxVoltage = 1;
         private bool isDrawing = false;
         private Vector2 wireStart;
-        private const float GridSize = 20.0f; // Define the grid size
         public Wire? Hovered = null;
         public Wire? Selected = null;
         private Wire drawPreview = new();
@@ -128,36 +129,28 @@ namespace CircuitSim.Desktop
         /// </summary>
         public void Draw()
         {
-
-            for (int i = 0; i < GetScreenWidth(); i += (int)GridSize)
-            {
-                DrawLine(i, 0, i, GetScreenHeight(), Constants.GridColor);
-            }
-            for (int i = 0; i < GetScreenHeight(); i += (int)GridSize)
-            {
-                DrawLine(0, i, GetScreenWidth(), i, Constants.GridColor);
-            }
+            DrawGrid();
 
             DrawText($"Selected: {WireType.Name}", 10, Raylib.GetScreenHeight() - 20, 20, Color.RayWhite);
 
             if (ShowControls)
             {
                 int i = 0;
-                foreach(var (_, mapping) in _inputSystem.Keymappings)
+                foreach (var (_, mapping) in _inputSystem.Keymappings)
                 {
                     DrawText($"[{mapping.Key}] - {mapping.Name}", 10, 40 + i * 30, 20, Color.RayWhite);
                     i++;
                 }
             }
 
-            if(Hovered != null)
+            if (Hovered != null)
             {
                 var txt = $"{Hovered.GetType().Name}\n\nVoltage: {Hovered.Voltage:0.00000}V\n\nCurrent: {Hovered.Current:0.00000}A\n\nResistance: {Hovered.Resistance:0.00000} Ohms";
                 var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
                 Utils.DrawTextBox(txt,
-                    new Vector2(10, GetScreenHeight()) + new Vector2(textSize.X, -textSize.Y), 
-                    0, 
-                    Color.RayWhite, 
+                    new Vector2(10, GetScreenHeight()) + new Vector2(textSize.X, -textSize.Y),
+                    0,
+                    Color.RayWhite,
                     Color.RayWhite,
                     20);
 
@@ -167,7 +160,7 @@ namespace CircuitSim.Desktop
             {
                 WireRenderer.Render(wire, GetColor(wire));
             }
-            if(isDrawing)
+            if (isDrawing)
                 WireRenderer.Render(drawPreview, Color.RayWhite);
 
             _uiSystem.DrawUI();
@@ -177,22 +170,54 @@ namespace CircuitSim.Desktop
             }
         }
 
+        private static void DrawGrid()
+        {
+            int skipped = (int) Math.Ceiling(Constants.Margin / Constants.GridSize);
+            int xSquares = GetScreenWidth() / (int)Constants.GridSize - skipped;
+            int ySquares = GetScreenHeight() / (int)Constants.GridSize - skipped;
+            int size = (int)Constants.GridSize;
+
+            int width = GetScreenWidth() - skipped * size;
+            int height = GetScreenHeight() - skipped * size;
+
+            int gcd = TNumberTheory.GCD([xSquares, ySquares]);
+            if (gcd == 1)
+                gcd = 5;
+
+            for (int i = skipped; i <= xSquares; i++)
+            {
+                if (i % gcd == 0)
+                    DrawLineEx(new(i * size, skipped * size), new(i * size, height), Constants.GridLineWidth * 2, Constants.GridColor);
+                else
+                    DrawLine(i * size, skipped * size, i * size, height, Constants.FaintGridColor);
+            }
+
+            for (int i = skipped; i <= ySquares; i++)
+            {
+                if (i % gcd == 0)
+                    DrawLineEx(new(skipped * size, i * size), new(width, i * size), Constants.GridLineWidth * 2, Constants.GridColor);
+                else
+                    DrawLine(skipped * size, i * size, width, i * size, Constants.FaintGridColor);
+            }
+
+        }
+
         private Color GetColor(Wire wire)
         {
             if (Hovered == wire)
-                return Color.Blue;
+                return Constants.HoveredColor;
             if (Hovered != null && Hovered.Inputs.Contains(wire))
-                return Color.Red;
+                return Constants.InputHoveredColor;
             if (Hovered != null && Hovered.Outputs.Contains(wire))
-                return Color.Yellow;
+                return Constants.OutputHoveredColor;
 
             return new Color(25, (int)Math.Min((wire.Voltage / maxVoltage * 230) + 25, 255), 25, 255);
         }
 
         private Vector2 SnapToGrid(Vector2 position)
         {
-            float x = MathF.Round(position.X / GridSize) * GridSize;
-            float y = MathF.Round(position.Y / GridSize) * GridSize;
+            float x = MathF.Round(position.X / Constants.GridSize) * Constants.GridSize;
+            float y = MathF.Round(position.Y / Constants.GridSize) * Constants.GridSize;
             return new Vector2(x, y);
         }
 
