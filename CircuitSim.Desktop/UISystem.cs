@@ -74,6 +74,7 @@ namespace CircuitSim.Desktop
                                                        Raylib.IsMouseButtonPressed(MouseButton.Left))
                         {
                             drawers[i][j].Action();
+                            selectedDrawer = -1;
                         }
                     }
                 }

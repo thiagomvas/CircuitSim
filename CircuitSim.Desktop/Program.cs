@@ -3,6 +3,8 @@ using CircuitSim.Desktop;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
 
+
+
 var manager = SimulationManager.Instance;
 manager.UseCircuit(Circuit.FromTemplate("Displays"));
 SetConfigFlags(ConfigFlags.ResizableWindow | ConfigFlags.FullscreenMode);

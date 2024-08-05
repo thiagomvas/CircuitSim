@@ -5,6 +5,7 @@ using CircuitSim.Desktop.Input;
 using Raylib_cs;
 using System.ComponentModel.Design;
 using System.Numerics;
+using System.Reflection;
 using TMath;
 using TMath.Numerics.AdvancedMath;
 using static CircuitSim.Desktop.UISystem;
@@ -73,6 +74,9 @@ namespace CircuitSim.Desktop
             {
                 _inputSystem = new();
                 _uiSystem.AddDrawer(_inputSystem.Keymappings.Select(kvp => new DrawerButton(kvp.Value.Name, () => _inputSystem.CheckForInput(kvp.Key))).ToArray());
+                var templatePaths = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
+                var buttons = templatePaths.Select(p => new DrawerButton(Path.GetFileNameWithoutExtension(p), () => UseCircuit(Circuit.DeserializeFromJson(File.ReadAllText(p))))).ToArray();
+                _uiSystem.AddDrawer(buttons);
             }
             var key = GetKeyPressed();
             if(key != 0)
