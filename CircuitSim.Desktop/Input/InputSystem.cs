@@ -19,7 +19,7 @@ namespace CircuitSim.Desktop.Input
             { KeyboardKey.S, new(nameof(VoltageSource), KeyboardKey.S, () => SimulationManager.Instance.WireType = typeof(VoltageSource)) },
             { KeyboardKey.Delete, new("Delete Selection", KeyboardKey.Delete, SimulationManager.Instance.DeleteHovered) },
             { KeyboardKey.F, new("Begin Flow", KeyboardKey.F, SimulationManager.Instance.BeginFlow) },
-            { KeyboardKey.Tab, new("Toggle Controls", KeyboardKey.Tab, () => SimulationManager.Instance.ShowControls = !SimulationManager.Instance.ShowControls) }
+            { KeyboardKey.Tab, new("Toggle Controls", KeyboardKey.Tab, () => SimulationManager.Instance.ShowControls = !SimulationManager.Instance.ShowControls) },
         };
 
 

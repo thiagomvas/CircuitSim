@@ -12,7 +12,7 @@ namespace CircuitSim.Desktop
 
         public const float CurrentBallRadius = 5;
 
-        public static float CurrentSpeedScale = 1000;
+        public static float CurrentSpeedScale = 100;
 
         /// <summary>
         /// The background color.

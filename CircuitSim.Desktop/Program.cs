@@ -6,7 +6,6 @@ using static Raylib_cs.Raylib;
 var manager = SimulationManager.Instance;
 manager.UseCircuit(Circuit.FromTemplate("Displays"));
 SetConfigFlags(ConfigFlags.ResizableWindow);
-SetConfigFlags(ConfigFlags.FullscreenMode);
 InitWindow(1920, 1080, "CircuitSim");
 SetTargetFPS(60);
 

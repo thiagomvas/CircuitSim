@@ -29,6 +29,7 @@ namespace CircuitSim.Core.Common
         /// </summary>
         [JsonIgnore] public double Current { get; protected set; } = 0;
 
+
         /// <summary>
         /// Gets or sets the resistance of the wire.
         /// </summary>
