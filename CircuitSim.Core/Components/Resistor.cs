@@ -17,24 +17,24 @@ namespace CircuitSim.Core.Components
             Voltage = PreFlowVoltage;
 
             if (Inputs.Count > 1)
-                Current = Inputs.Sum(w => w.Current); // If multiple inputs, use the sum regardless
+                preFlowCurrent = Inputs.Sum(w => w.preFlowCurrent); // If multiple inputs, use the sum regardless
             else
-                Current = PreFlowCurrent;
+                preFlowCurrent = PreFlowCurrent;
 
-            double voltageAddition = -Current * Resistance;
+            double voltageAddition = -preFlowCurrent * Resistance;
             double currentAddition = 0;
 
             PreFlowVoltage = 0;
             PreFlowCurrent = 0;
             Voltage = Math.Max(0, Voltage);
-            Current = Math.Max(0, Current);
+            preFlowCurrent = Math.Max(0, preFlowCurrent);
 
             if (Outputs.Count == 1)
             {
                 var @out = Outputs[0];
 
                 @out.AddVoltage(Voltage + voltageAddition);
-                @out.AddCurrent(Current + currentAddition);
+                @out.AddCurrent(preFlowCurrent + currentAddition);
 
                 @out.Flow();
             }
@@ -47,7 +47,7 @@ namespace CircuitSim.Core.Components
                     foreach (var output in Outputs)
                     {
                         output.AddVoltage(Voltage + voltageAddition);
-                        output.AddCurrent(Current / Outputs.Count + currentAddition);
+                        output.AddCurrent(preFlowCurrent / Outputs.Count + currentAddition);
                         output.Flow();
                     }
                 }
@@ -73,7 +73,7 @@ namespace CircuitSim.Core.Components
                             currentFraction = (1 / outputResistance) / totalInverseResistance;
                         }
                         output.AddVoltage(Voltage + voltageAddition);
-                        output.AddCurrent(Current * currentFraction + currentAddition);
+                        output.AddCurrent(preFlowCurrent * currentFraction + currentAddition);
                         output.Flow();
                     }
                 }

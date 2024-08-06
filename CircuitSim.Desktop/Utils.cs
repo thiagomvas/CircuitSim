@@ -21,12 +21,12 @@ namespace CircuitSim.Desktop
         {
             var dir = end - start;
             var len = dir.Length();
-            if (wire.Current > 0)
+            if (wire.preFlowCurrent > 0)
             {
                 var ballCount = (int)(len / 20);
                 for (int i = 0; i < ballCount; i++)
                 {
-                    var pos = start + Vector2.Normalize(dir) * (((float)GetTime() * (float)wire.Current * Constants.CurrentSpeedScale + i * 20) % len);
+                    var pos = start + Vector2.Normalize(dir) * (((float)GetTime() * (float)wire.preFlowCurrent * Constants.CurrentSpeedScale + i * 20) % len);
                     DrawCircleV(pos, Constants.CurrentBallRadius, Color.Yellow);
                 }
             }
@@ -34,12 +34,12 @@ namespace CircuitSim.Desktop
 
         public static void DrawCurrent(Wire wire)
         {
-            if (wire.Current > 0)
+            if (wire.preFlowCurrent > 0)
             {
                 var ballCount = (int)(wire.Length / 20);
                 for (int i = 0; i < ballCount; i++)
                 {
-                    var pos = wire.Start + wire.Direction * (((float)GetTime() * (float)wire.Current * Constants.CurrentSpeedScale + i * 20) % wire.Length);
+                    var pos = wire.Start + wire.Direction * (((float)GetTime() * (float)wire.preFlowCurrent * Constants.CurrentSpeedScale + i * 20) % wire.Length);
                     DrawCircleV(pos, Constants.CurrentBallRadius + 1, Color.Yellow);
                 }
             }

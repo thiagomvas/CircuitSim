@@ -116,7 +116,7 @@ namespace CircuitSim.Desktop
                 wire.End);
             Utils.DrawCurrent(wire.Start, wire.End, wire);
 
-            string txt = $"{wire.Current:0.00}A";
+            string txt = $"{wire.preFlowCurrent:0.00}A";
             DrawTextPro(GetFontDefault(),
                         txt,
                         wire.Center + normal * 16,
