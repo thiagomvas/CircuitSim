@@ -1,7 +1,6 @@
 ﻿using CircuitSim.Core.DTOs;
 using Newtonsoft.Json;
 using System.Numerics;
-using System.Transactions;
 
 namespace CircuitSim.Core.Common
 {
@@ -28,28 +27,12 @@ namespace CircuitSim.Core.Common
         /// <summary>
         /// Gets the current flowing through the wire after flow computation.
         /// </summary>
-        [JsonIgnore] public double preFlowCurrent { get; protected set; } = 0;
+        [JsonIgnore] public double Current { get; protected set; } = 0;
 
         /// <summary>
         /// Gets or sets the resistance of the wire.
         /// </summary>
         public double Resistance { get; set; } = 0;
-
-        /// <summary>
-        /// Gets or sets the Power of the wire.
-        /// </summary>
-        [JsonIgnore] public double Power => Voltage * preFlowCurrent;
-
-        /// <summary>
-        /// Gets or sets the Inductance of the wire.
-        /// </summary>
-        [JsonIgnore] public double Inductance { get; set; } = 0;
-
-        /// <summary>
-        /// Gets or sets the Capacitance of the wire.
-        /// </summary>
-        /// 
-        [JsonIgnore] public double Capacitance { get; set; } = 0;
 
         private Vector2 start, end;
 
@@ -107,7 +90,7 @@ namespace CircuitSim.Core.Common
             PreFlowVoltage = 0;
             PreFlowCurrent = 0;
             Voltage = 0;
-            preFlowCurrent = 0;
+            Current = 0;
         }
 
         /// <summary>
@@ -164,21 +147,21 @@ namespace CircuitSim.Core.Common
             Voltage = PreFlowVoltage;
 
             if (Inputs.Count > 1)
-                preFlowCurrent = Inputs.Sum(w => w.preFlowCurrent); // If multiple inputs, use the sum regardless
+                Current = Inputs.Sum(w => w.Current); // If multiple inputs, use the sum regardless
             else
-                preFlowCurrent = PreFlowCurrent;
+                Current = PreFlowCurrent;
 
             PreFlowVoltage = 0;
             PreFlowCurrent = 0;
             Voltage = Math.Max(0, Voltage);
-            preFlowCurrent = Math.Max(0, preFlowCurrent);
+            Current = Math.Max(0, Current);
 
             if (Outputs.Count == 1)
             {
                 var @out = Outputs[0];
 
                 @out.AddVoltage(Voltage + voltageAddition);
-                @out.AddCurrent(preFlowCurrent + currentAddition);
+                @out.AddCurrent(Current + currentAddition);
 
                 @out.Flow();
             }
@@ -191,7 +174,7 @@ namespace CircuitSim.Core.Common
                     foreach (var output in Outputs)
                     {
                         output.AddVoltage(Voltage + voltageAddition);
-                        output.AddCurrent(preFlowCurrent / Outputs.Count + currentAddition);
+                        output.AddCurrent(Current / Outputs.Count + currentAddition);
                         output.Flow();
                     }
                 }
@@ -217,7 +200,7 @@ namespace CircuitSim.Core.Common
                             currentFraction = (1 / outputResistance) / totalInverseResistance;
                         }
                         output.AddVoltage(Voltage + voltageAddition);
-                        output.AddCurrent(preFlowCurrent * currentFraction + currentAddition);
+                        output.AddCurrent(Current * currentFraction + currentAddition);
                         output.Flow();
                     }
                 }
@@ -269,7 +252,7 @@ namespace CircuitSim.Core.Common
         /// <returns>A string representation of the wire.</returns>
         public override string ToString()
         {
-            return $"{Voltage}V - {preFlowCurrent}A - {Resistance}Ohm";
+            return $"{Voltage}V - {Current}A - {Resistance}Ohm";
         }
 
         internal WireDTO ToDTO()
