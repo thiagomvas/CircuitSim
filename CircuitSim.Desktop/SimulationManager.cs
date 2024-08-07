@@ -2,13 +2,14 @@
 using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 using CircuitSim.Desktop.Input;
+using CircuitSim.Desktop.UI;
 using Raylib_cs;
 using System.ComponentModel.Design;
 using System.Numerics;
 using System.Reflection;
 using TMath;
 using TMath.Numerics.AdvancedMath;
-using static CircuitSim.Desktop.UISystem;
+using static CircuitSim.Desktop.UI.UISystem;
 using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
@@ -73,10 +74,10 @@ namespace CircuitSim.Desktop
             if (_inputSystem == null)
             {
                 _inputSystem = new();
-                _uiSystem.AddDrawer(_inputSystem.Keymappings.Select(kvp => new DrawerButton(kvp.Value.Name, () => _inputSystem.CheckForInput(kvp.Key))).ToArray());
+                _uiSystem.AddDrawer(new("Components", _inputSystem.Keymappings.Select(kvp => new DrawerButton(kvp.Value.Name, () => _inputSystem.CheckForInput(kvp.Key))).ToArray()));
                 var templatePaths = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
                 var buttons = templatePaths.Select(p => new DrawerButton(Path.GetFileNameWithoutExtension(p), () => UseCircuit(Circuit.DeserializeFromJson(File.ReadAllText(p))))).ToArray();
-                _uiSystem.AddDrawer(buttons);
+                _uiSystem.AddDrawer(new("Templates", buttons));
             }
             var key = GetKeyPressed();
             if(key != 0)
@@ -88,15 +89,17 @@ namespace CircuitSim.Desktop
 
             if (IsMouseButtonPressed(MouseButton.Left))
             {
+                var pos = GetMousePosition();
                 isDrawing = true;
-                drawPreview = (Wire)Activator.CreateInstance(WireType);
-                wireStart = SnapToGrid(GetMousePosition());
-                drawPreview!.Start = SnapToGrid(GetMousePosition());
+                drawPreview = (Wire)Activator.CreateInstance(WireType)!;
+                wireStart = SnapToGrid(pos);
+                drawPreview!.Start = SnapToGrid(pos);
             }
             if (IsMouseButtonReleased(MouseButton.Left))
             {
+                var pos = GetMousePosition();
                 isDrawing = false;
-                var wireEnd = SnapToGrid(GetMousePosition());
+                var wireEnd = SnapToGrid(pos) ;
                 if(wireStart != wireEnd)
                     CreateWire(wireEnd);
             }
