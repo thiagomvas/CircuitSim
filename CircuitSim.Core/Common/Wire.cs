@@ -88,6 +88,7 @@ namespace CircuitSim.Core.Common
             Outputs = new List<Wire>();
         }
 
+        public virtual void Interact() { }
         public void Reset()
         {
             PreFlowVoltage = 0;

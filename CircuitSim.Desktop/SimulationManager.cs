@@ -41,7 +41,6 @@ namespace CircuitSim.Desktop
                 return instance;
             }
         }
-
         private SimulationManager()
         {
             Circuit = new();
@@ -100,8 +99,13 @@ namespace CircuitSim.Desktop
                 var pos = GetMousePosition();
                 isDrawing = false;
                 var wireEnd = SnapToGrid(pos) ;
-                if(wireStart != wireEnd)
+                if (wireStart != wireEnd)
                     CreateWire(wireEnd);
+                else if (Hovered != null)
+                {
+                    Hovered.Interact();
+                    BeginFlow();
+                }
             }
 
             if (isDrawing)
