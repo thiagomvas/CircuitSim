@@ -1,6 +1,5 @@
 ﻿using CircuitSim.Core.Common;
 
-namespace CircuitSim.Core.Components
-{
-    public class Ammeter : Wire;
-}
+namespace CircuitSim.Core.Components;
+
+public class Ammeter : Wire;

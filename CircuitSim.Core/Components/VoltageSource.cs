@@ -1,29 +1,28 @@
 ﻿using CircuitSim.Core.Annotations;
 using CircuitSim.Core.Common;
 
-namespace CircuitSim.Core.Components
+namespace CircuitSim.Core.Components;
+
+/// <summary>
+/// Represents a voltage source component in a circuit.
+/// </summary>
+public class VoltageSource : Wire
 {
     /// <summary>
-    /// Represents a voltage source component in a circuit.
+    /// Gets or sets the supply voltage of the voltage source.
     /// </summary>
-    public class VoltageSource : Wire
+    [PropertyEditable]
+    public double SupplyVoltage { get; set; }
+
+    /// <inheritdoc/>
+    public override void Flow()
     {
-        /// <summary>
-        /// Gets or sets the supply voltage of the voltage source.
-        /// </summary>
-        [PropertyEditable]
-        public double SupplyVoltage { get; set; }
+        if (Inputs.Count != 0)
+            Inputs = new();
 
-        /// <inheritdoc/>
-        public override void Flow()
-        {
-            if (Inputs.Count != 0)
-                Inputs = new();
+        SetVoltage(SupplyVoltage);
+        SetCurrent(SupplyVoltage / GetCircuitResistance());
 
-            SetVoltage(SupplyVoltage);
-            SetCurrent(SupplyVoltage / GetCircuitResistance());
-
-            DefaultFlow();
-        }
+        DefaultFlow();
     }
 }
