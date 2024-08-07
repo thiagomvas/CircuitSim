@@ -17,9 +17,11 @@ namespace CircuitSim.Desktop.Input
             { KeyboardKey.R, new(nameof(Resistor), KeyboardKey.R, () => SimulationManager.Instance.WireType = typeof(Resistor)) },
             { KeyboardKey.V, new(nameof(Voltmeter), KeyboardKey.V, () => SimulationManager.Instance.WireType = typeof(Voltmeter)) },
             { KeyboardKey.S, new(nameof(VoltageSource), KeyboardKey.S, () => SimulationManager.Instance.WireType = typeof(VoltageSource)) },
+            { KeyboardKey.T, new(nameof(Switch), KeyboardKey.T, () => SimulationManager.Instance.WireType = typeof(Switch)) },
             { KeyboardKey.Delete, new("Delete Selection", KeyboardKey.Delete, SimulationManager.Instance.DeleteHovered) },
             { KeyboardKey.F, new("Begin Flow", KeyboardKey.F, SimulationManager.Instance.BeginFlow) },
             { KeyboardKey.Tab, new("Toggle Controls", KeyboardKey.Tab, () => SimulationManager.Instance.ShowControls = !SimulationManager.Instance.ShowControls) },
+
         };
 
 

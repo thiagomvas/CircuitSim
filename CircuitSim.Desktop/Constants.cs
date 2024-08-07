@@ -27,5 +27,6 @@ namespace CircuitSim.Desktop
         public static readonly Color InputHoveredColor = Color.Red;
         public static readonly Color OutputHoveredColor = Color.DarkGreen;
         public static readonly Color HoveredColor = Color.Yellow;
+        public static readonly Color NoVoltColor = Color.Black;
     }
 }
