@@ -1,4 +1,5 @@
-﻿using CircuitSim.Core.Common;
+﻿using CircuitSim.Core.Annotations;
+using CircuitSim.Core.Common;
 
 namespace CircuitSim.Core.Components
 {
@@ -10,6 +11,7 @@ namespace CircuitSim.Core.Components
         /// <summary>
         /// Gets or sets the supply voltage of the voltage source.
         /// </summary>
+        [PropertyEditable]
         public double SupplyVoltage { get; set; }
 
         /// <inheritdoc/>
