@@ -2,5 +2,5 @@
 
 namespace CircuitSim.Core.Components
 {
-    public class Ammeter : Wire;
+    public class Voltmeter : Wire;
 }

@@ -111,5 +111,30 @@ namespace CircuitSim.Core.Common
 
             return null;
         }
+
+        public void RemoveWire(Wire hovered)
+        {
+            foreach(var wire in hovered.Inputs)
+            {
+                wire.Outputs.Remove(hovered);
+            }
+
+            foreach (var wire in hovered.Outputs)
+            {
+                wire.Inputs.Remove(hovered);
+            }
+
+            Wires.Remove(hovered);
+        }
+
+        public static Circuit FromTemplate(string templateName)
+        {
+            if (!File.Exists($"Templates/{templateName}.json"))
+                return new();
+
+            var template = File.ReadAllText($"Templates/{templateName}.json");
+            return DeserializeFromJson(template);
+
+        }
     }
 }
