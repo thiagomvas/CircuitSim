@@ -4,7 +4,6 @@ using CircuitSim.Core.Components;
 using Raylib_cs;
 using System.Numerics;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
@@ -185,7 +184,7 @@ namespace CircuitSim.Desktop
         {
             var s = (Switch)wire;
             float switchLength = 0;
-            if(wire.Length > Constants.GridSize * 1.5f)
+            if (wire.Length > Constants.GridSize * 1.5f)
                 switchLength = Constants.GridSize * 1.5f;
             else
                 switchLength = wire.Length / 2;
@@ -194,8 +193,8 @@ namespace CircuitSim.Desktop
 
             DrawLineEx(wire.Start, wire.Center - wire.Direction * switchLength, Constants.WireWidth, color);
             DrawLineEx(wire.Center + wire.Direction * switchLength, wire.End, Constants.WireWidth, color);
-            
-            if(s.State)
+
+            if (s.State)
                 DrawLineEx(wire.Center - wire.Direction * switchLength, wire.Center + wire.Direction * switchLength, Constants.WireWidth, Color.Gray);
             else
                 DrawLineEx(wire.Center - wire.Direction * switchLength, wire.Center + wire.Direction * switchLength + normal * Constants.GridSize, Constants.WireWidth, Color.Gray);

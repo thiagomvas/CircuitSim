@@ -114,7 +114,7 @@ namespace CircuitSim.Core.Common
 
         public void RemoveWire(Wire hovered)
         {
-            foreach(var wire in hovered.Inputs)
+            foreach (var wire in hovered.Inputs)
             {
                 wire.Outputs.Remove(hovered);
             }

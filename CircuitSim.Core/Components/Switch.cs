@@ -7,7 +7,7 @@ namespace CircuitSim.Core.Components
         public bool State { get; set; }
         public override void Flow()
         {
-            if(State)
+            if (State)
                 base.Flow();
         }
 

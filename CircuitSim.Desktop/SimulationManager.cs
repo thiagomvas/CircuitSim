@@ -1,15 +1,10 @@
-﻿using CircuitSim.Core;
-using CircuitSim.Core.Common;
+﻿using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 using CircuitSim.Desktop.Input;
 using CircuitSim.Desktop.UI;
 using Raylib_cs;
-using System.ComponentModel.Design;
 using System.Numerics;
-using System.Reflection;
-using TMath;
 using TMath.Numerics.AdvancedMath;
-using static CircuitSim.Desktop.UI.UISystem;
 using static Raylib_cs.Raylib;
 
 namespace CircuitSim.Desktop
@@ -79,7 +74,7 @@ namespace CircuitSim.Desktop
                 _uiSystem.AddDrawer(new("Templates", buttons));
             }
             var key = GetKeyPressed();
-            if(key != 0)
+            if (key != 0)
             {
                 _inputSystem.CheckForInput((KeyboardKey)key);
             }
@@ -98,7 +93,7 @@ namespace CircuitSim.Desktop
             {
                 var pos = GetMousePosition();
                 isDrawing = false;
-                var wireEnd = SnapToGrid(pos) ;
+                var wireEnd = SnapToGrid(pos);
                 if (wireStart != wireEnd)
                     CreateWire(wireEnd);
                 else if (Hovered != null)
@@ -127,7 +122,7 @@ namespace CircuitSim.Desktop
                     }
                 }
             }
-            if(IsMouseButtonPressed(MouseButton.Right))
+            if (IsMouseButtonPressed(MouseButton.Right))
             {
                 Selected = Hovered;
                 _uiSystem.SelectWire(Selected);
@@ -183,7 +178,7 @@ namespace CircuitSim.Desktop
 
         private static void DrawGrid()
         {
-            int skipped = (int) Math.Ceiling(Constants.Margin / Constants.GridSize);
+            int skipped = (int)Math.Ceiling(Constants.Margin / Constants.GridSize);
             int xSquares = GetScreenWidth() / (int)Constants.GridSize - skipped;
             int ySquares = GetScreenHeight() / (int)Constants.GridSize - skipped;
             int size = (int)Constants.GridSize;
@@ -241,7 +236,7 @@ namespace CircuitSim.Desktop
             Wire newWire;
             if (WireType == typeof(Resistor))
             {
-                newWire = new Resistor { Start = wireStart, End = wireEnd};
+                newWire = new Resistor { Start = wireStart, End = wireEnd };
             }
             else if (WireType == typeof(VoltageSource))
             {
@@ -249,7 +244,7 @@ namespace CircuitSim.Desktop
             }
             else
             {
-                newWire = (Wire) Activator.CreateInstance(WireType)!;
+                newWire = (Wire)Activator.CreateInstance(WireType)!;
                 newWire.Start = wireStart;
                 newWire.End = wireEnd;
             }
@@ -259,7 +254,7 @@ namespace CircuitSim.Desktop
         public void DeleteHovered()
         {
             if (Hovered != null)
-                Circuit.RemoveWire(Hovered); 
+                Circuit.RemoveWire(Hovered);
         }
 
         public void BeginFlow()
