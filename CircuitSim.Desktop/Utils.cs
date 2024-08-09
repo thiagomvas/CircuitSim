@@ -1,26 +1,11 @@
 ﻿using CircuitSim.Core.Common;
 using Raylib_cs;
-using System.ComponentModel.DataAnnotations;
 using System.Numerics;
-using TMath;
 using static Raylib_cs.Raylib;
 namespace CircuitSim.Desktop;
 
 internal static class Utils
 {
-    private static readonly Dictionary<int, string> siPrefixes = new()
-    {
-        { 4, "T" },
-        { 3, "G" },
-        { 2, "M" },
-        { 1, "k" },
-        { 0, "" },
-        { -1, "m" },
-        { -2, "μ" },
-        { -3, "n" },
-        { -4, "p" }
-
-    };
     public static Raylib_cs.Color SystemDrawingColorToRaylib(System.Drawing.Color color)
         => new Raylib_cs.Color(color.R, color.G, color.B, color.A);
     public static double ParseValue(string formattedValue)

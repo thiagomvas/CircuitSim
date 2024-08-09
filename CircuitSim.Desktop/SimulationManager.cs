@@ -1,9 +1,11 @@
-﻿using CircuitSim.Core.Common;
+﻿using CircuitSim.Core.Annotations;
+using CircuitSim.Core.Common;
 using CircuitSim.Core.Components;
 using CircuitSim.Desktop.Input;
 using CircuitSim.Desktop.UI;
 using Raylib_cs;
 using System.Numerics;
+using System.Reflection;
 using TMath.Numerics.AdvancedMath;
 using static Raylib_cs.Raylib;
 
@@ -68,7 +70,15 @@ internal class SimulationManager
         if (_inputSystem == null)
         {
             _inputSystem = new();
-            _uiSystem.AddDrawer(new("Components", _inputSystem.Keymappings.Select(kvp => new DrawerButton(kvp.Value.Name, () => _inputSystem.CheckForInput(kvp.Key))).ToArray()));
+
+            // Component Types
+            var typeButtons = Assembly.GetAssembly(typeof(Wire))!
+                .GetTypes().Where(t => t.IsSubclassOf(typeof(Wire)) && 
+                t.GetCustomAttribute<HiddenAttribute>() == null && 
+                !t.IsAbstract)
+                .Select(t => new DrawerButton(t.Name, () => WireType = t));
+            _uiSystem.AddDrawer(new DrawerContainer("Components", typeButtons));
+
             var templatePaths = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Templates"));
             var buttons = templatePaths.Select(p => new DrawerButton(Path.GetFileNameWithoutExtension(p), () => UseCircuit(Circuit.DeserializeFromJson(File.ReadAllText(p))))).ToArray();
             _uiSystem.AddDrawer(new("Templates", buttons));
