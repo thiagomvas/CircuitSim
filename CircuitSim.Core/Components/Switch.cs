@@ -9,6 +9,11 @@ public class Switch : Wire
     {
         if (State)
             base.Flow();
+        else
+        {
+            Voltage = PreFlowVoltage;
+            Current = PreFlowCurrent;
+        }
     }
 
     public override sealed void Interact()

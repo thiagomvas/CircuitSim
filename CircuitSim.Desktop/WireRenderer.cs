@@ -192,12 +192,22 @@ public static class WireRenderer
         var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
 
         DrawLineEx(wire.Start, wire.Center - wire.Direction * switchLength, Constants.WireWidth, color);
-        DrawLineEx(wire.Center + wire.Direction * switchLength, wire.End, Constants.WireWidth, color);
 
         if (s.State)
+        {
+            DrawLineEx(wire.Center + wire.Direction * switchLength, wire.End, Constants.WireWidth, color);
+
             DrawLineEx(wire.Center - wire.Direction * switchLength, wire.Center + wire.Direction * switchLength, Constants.WireWidth, Color.Gray);
+            Utils.DrawCurrent(wire.Start, wire.End, wire);
+        }
         else
+        {
+            DrawLineEx(wire.Center + wire.Direction * switchLength, wire.End, Constants.WireWidth, Color.Black);
+
             DrawLineEx(wire.Center - wire.Direction * switchLength, wire.Center + wire.Direction * switchLength + normal * Constants.GridSize, Constants.WireWidth, Color.Gray);
+            Utils.DrawCurrent(wire.Start, wire.Center - wire.Direction * switchLength, wire);
+
+        }
 
     }
 
