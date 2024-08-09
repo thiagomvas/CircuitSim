@@ -77,7 +77,7 @@ public static class WireRenderer
         DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
 
         Utils.DrawCurrent(wire.Start, wire.End, wire);
-        string txt = $"{wire.Resistance} Ohms";
+        string txt = $"{Utils.FormatValue(wire.Resistance)} Ohms";
         Utils.DrawTextBox(txt, wire.Center, wire.AngleDeg, color, Color.White);
     }
 
@@ -87,7 +87,7 @@ public static class WireRenderer
         DrawLineEx(wire.Center, wire.End, Constants.WireWidth, color);
 
         Utils.DrawCurrent(pos, wire.End, wire);
-        string txt = $"{wire.Voltage:0.00}V";
+        string txt = $"{Utils.FormatValue(((VoltageSource)wire).SupplyVoltage)}V";
         Utils.DrawTextBox(txt, pos, wire.AngleDeg, color, Color.White);
     }
 
@@ -116,7 +116,7 @@ public static class WireRenderer
             wire.End);
         Utils.DrawCurrent(wire.Start, wire.End, wire);
 
-        string txt = $"{wire.Current:0.00}A";
+        string txt = $"{Utils.FormatValue(wire.Current)}A";
         DrawTextPro(GetFontDefault(),
                     txt,
                     wire.Center + normal * 16,
@@ -144,7 +144,7 @@ public static class WireRenderer
 
     private static void RenderVoltmeter(Wire wire, Color color)
     {
-        string txt = $"{wire.Voltage:0.00}V";
+        string txt = $"{Utils.FormatValue(wire.Voltage)}V";
         var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
         DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
         DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);
@@ -164,7 +164,7 @@ public static class WireRenderer
     private static void RenderOhmeter(Wire wire, Color color)
     {
         var ohmeter = (Ohmeter)wire;
-        string txt = $"{ohmeter.CircuitResistance:0.00} Ohms";
+        string txt = $"{Utils.FormatValue(((Ohmeter) wire).CircuitResistance)} Ohms";
         var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
         DrawLineEx(wire.Start, wire.Center - wire.Direction * textSize.X / 2, Constants.WireWidth, color);
         DrawLineEx(wire.Center + wire.Direction * textSize.X / 2, wire.End, Constants.WireWidth, color);

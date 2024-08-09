@@ -26,33 +26,48 @@ internal static class Utils
 
     public static string FormatValue(double value)
     {
-        var degSign = value < 0.001 ? -1 : 1;
-        var sign = double.Sign(value);
-        if(value >= 1000)
+        if (value == 0)
+            return "0";
+
+        var absValue = Math.Abs(value);
+        int exponent = (int)Math.Floor(Math.Log10(absValue));
+        int siExponent = exponent / 3 * 3;
+        double normalizedValue = value / Math.Pow(10, siExponent);
+
+        if (normalizedValue % 1 == 0)
         {
-            int deg = 0;
-            int max = siPrefixes.Keys.Max();
-            while(value >= 1000 && deg < max)
-            {
-                deg++;
-                value = Math.Round(value * 0.001f);
-            }
-            return $"{value:0.000} {siPrefixes[deg]}";
-        }
-        if(value <= 1)
-        {
-            int deg = 0;
-            int min = siPrefixes.Keys.Min();
-            while(value <= 1 && deg > min)
-            {
-                deg--;
-                value *= 1000;
-            }
-            return $"{value:0.000} {siPrefixes[deg]}";
+            return $"{(int)normalizedValue} {GetSiPrefix(siExponent)}";
         }
 
-        return value.ToString("0.000");
+        string result = $"{normalizedValue:F3}".TrimEnd('0').TrimEnd('.');
+        return $"{result} {GetSiPrefix(siExponent)}";
     }
+
+    private static string GetSiPrefix(int siExponent)
+    {
+        return siExponent switch
+        {
+            -24 => "y",
+            -21 => "z",
+            -18 => "a",
+            -15 => "f",
+            -12 => "p",
+            -9 => "n",
+            -6 => "µ",
+            -3 => "m",
+            0 => "",
+            3 => "k",
+            6 => "M",
+            9 => "G",
+            12 => "T",
+            15 => "P",
+            18 => "E",
+            21 => "Z",
+            24 => "Y",
+            _ => ""
+        };
+    }
+
     public static void DrawLineStrip(Color color, params Vector2[] points)
     {
         for (int i = 1; i < points.Length; i++)

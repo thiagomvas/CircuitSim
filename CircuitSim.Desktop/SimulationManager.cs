@@ -151,7 +151,7 @@ internal class SimulationManager
 
         if (Hovered != null)
         {
-            var txt = $"{Hovered.GetType().Name}\n\nVoltage: {Hovered.Voltage:0.00000}V\n\nCurrent: {Hovered.Current:0.00000}A\n\nResistance: {Hovered.Resistance:0.00000} Ohms";
+            var txt = $"{Hovered.GetType().Name}\n\nVoltage: {Utils.FormatValue(Hovered.Voltage)}V\n\nCurrent: {Utils.FormatValue(Hovered.Current)}A\n\nResistance: {Utils.FormatValue(Hovered.Resistance)} Ohms";
             var textSize = MeasureTextEx(GetFontDefault(), txt, 16, 1);
             Utils.DrawTextBox(txt,
                 new Vector2(10, GetScreenHeight()) + new Vector2(textSize.X, -textSize.Y),
