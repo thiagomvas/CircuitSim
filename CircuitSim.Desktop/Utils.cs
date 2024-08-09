@@ -23,6 +23,62 @@ internal static class Utils
     };
     public static Raylib_cs.Color SystemDrawingColorToRaylib(System.Drawing.Color color)
         => new Raylib_cs.Color(color.R, color.G, color.B, color.A);
+    public static double ParseValue(string formattedValue)
+    {
+        if (string.IsNullOrWhiteSpace(formattedValue))
+            return 0;
+
+        // Trim any leading or trailing whitespace
+        formattedValue = formattedValue.Trim();
+
+        // Regex to handle scientific notation and SI prefixes
+        var match = System.Text.RegularExpressions.Regex.Match(formattedValue, @"^([+-]?\d*\.?\d+([eE][+-]?\d+)?)([a-zA-Zµ]+)?$");
+        if (!match.Success)
+            return double.NaN;
+
+        // Parse the numeric part with scientific notation
+        if (!double.TryParse(match.Groups[1].Value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double number))
+            return double.NaN;
+
+        // Handle SI prefixes
+        var prefix = match.Groups[3].Value;
+        int exponent = GetSiExponent(prefix);
+        if (exponent != int.MinValue)
+        {
+            number *= Math.Pow(10, exponent);
+        }
+        else if (!string.IsNullOrEmpty(prefix))
+        {
+            return double.NaN;
+        }
+
+        return number;
+    }
+
+    private static int GetSiExponent(string prefix)
+    {
+        return prefix switch
+        {
+            "y" => -24,
+            "z" => -21,
+            "a" => -18,
+            "f" => -15,
+            "p" => -12,
+            "n" => -9,
+            "µ" => -6,
+            "m" => -3,
+            "k" => 3,
+            "M" => 6,
+            "G" => 9,
+            "T" => 12,
+            "P" => 15,
+            "E" => 18,
+            "Z" => 21,
+            "Y" => 24,
+            _ => int.MinValue
+        };
+    }
+
 
     public static string FormatValue(double value)
     {
@@ -36,11 +92,11 @@ internal static class Utils
 
         if (normalizedValue % 1 == 0)
         {
-            return $"{(int)normalizedValue} {GetSiPrefix(siExponent)}";
+            return $"{(int)normalizedValue}{GetSiPrefix(siExponent)}";
         }
 
         string result = $"{normalizedValue:F3}".TrimEnd('0').TrimEnd('.');
-        return $"{result} {GetSiPrefix(siExponent)}";
+        return $"{result}{GetSiPrefix(siExponent)}";
     }
 
     private static string GetSiPrefix(int siExponent)

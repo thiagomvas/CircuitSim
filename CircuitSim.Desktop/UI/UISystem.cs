@@ -132,7 +132,7 @@ public class UISystem
                 {
                     selectedPropValue += c;
                 }
-                else if (c == 8 && selectedPropValue.Length > 0)
+                else if (IsKeyPressed(KeyboardKey.Backspace) && selectedPropValue.Length > 0)
                 {
                     selectedPropValue = selectedPropValue[..^1];
                 }
@@ -141,7 +141,7 @@ public class UISystem
             // Save value when enter is pressed
             if (selectedProp != null && IsKeyPressed(KeyboardKey.Enter))
             {
-                selectedProp.SetValue(selectedWire, Convert.ChangeType(selectedPropValue, selectedProp.PropertyType));
+                selectedProp.SetValue(selectedWire, Convert.ChangeType(Utils.ParseValue(selectedPropValue), selectedProp.PropertyType));
                 selectedProp = null;
             }
 
