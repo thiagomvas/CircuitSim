@@ -36,6 +36,10 @@ public class Circuit
             }
         }
         Wires.Add(newWire);
+        if(newWire is MultiConnectionWire multi)
+        {
+            multi.AttachChildren(this);
+        }
     }
 
     /// <summary>
@@ -114,6 +118,23 @@ public class Circuit
 
     public void RemoveWire(Wire hovered)
     {
+        // Check if the wire is connected to a multiwire as an input or output
+        var multiWire = hovered.Inputs.OfType<MultiConnectionWire>().FirstOrDefault() ??
+                        hovered.Outputs.OfType<MultiConnectionWire>().FirstOrDefault() ??
+                        hovered as MultiConnectionWire;
+
+        if (multiWire != null)
+        {
+            // Remove the multiwire and all its connected wires
+            multiWire.RemoveSubWiresFromCircuit(this);
+            return;
+        }
+
+        // Otherwise, remove the wire normally
+        RemoveWireNoMult(hovered);
+    }
+    internal void RemoveWireNoMult(Wire hovered)
+    {
         foreach (var wire in hovered.Inputs)
         {
             wire.Outputs.Remove(hovered);
@@ -126,7 +147,6 @@ public class Circuit
 
         Wires.Remove(hovered);
     }
-
     public static Circuit FromTemplate(string templateName)
     {
         if (!File.Exists($"Templates/{templateName}.json"))

@@ -47,7 +47,7 @@ internal class SimulationManager
     public Wire? Hovered = null;
     public Wire? Selected = null;
     private Wire drawPreview = new();
-    public Type WireType { get; set; } = typeof(Wire);
+    public Type WireType { get; set; } = typeof(NPNTransistor);
     public bool ShowControls = false;
 
     /// <summary>
@@ -250,11 +250,20 @@ internal class SimulationManager
         }
         Circuit.AddWire(newWire);
 
+        if(WireType.IsAssignableTo(typeof(MultiConnectionWire)))
+        {
+            var multi = (MultiConnectionWire)newWire;
+        }
+
     }
     public void DeleteHovered()
     {
         if (Hovered != null)
+        {
             Circuit.RemoveWire(Hovered);
+            BeginFlow();
+        }
+
     }
 
     public void BeginFlow()

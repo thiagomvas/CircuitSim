@@ -200,4 +200,52 @@ public static class WireRenderer
             DrawLineEx(wire.Center - wire.Direction * switchLength, wire.Center + wire.Direction * switchLength + normal * Constants.GridSize, Constants.WireWidth, Color.Gray);
 
     }
+
+    private static void RenderNPNTransistor(Wire wire, Color color)
+    {
+        if(wire.Start != wire.End)
+        {
+            var npn = (NPNTransistor)wire;
+            Wire baseWire = npn.Base, emitterWire = npn.Emitter, collectorWire = npn.Collector;
+            // Render the base wire
+            var baseNormal = new Vector2(baseWire.Direction.Y, -baseWire.Direction.X);
+            DrawLineEx(baseWire.Start, baseWire.End, Constants.WireWidth, color);
+            DrawLineEx(baseWire.End + baseNormal * 40, baseWire.End - baseNormal * 40, Constants.WireWidth, color);
+            Utils.DrawCurrent(baseWire.Start, baseWire.End, baseWire);
+
+            // Render the emitter wire
+            DrawLineEx(emitterWire.Start, emitterWire.Center, Constants.WireWidth, color);
+            var emitterNormal = new Vector2(emitterWire.Direction.Y, -emitterWire.Direction.X);
+            Utils.DrawLineStrip(color, emitterWire.Center, emitterWire.Center + emitterNormal * 10, emitterWire.Center + emitterWire.Direction * 20, emitterWire.Center - emitterNormal * 10, emitterWire.Center);
+            DrawLineEx(emitterWire.Center + emitterWire.Direction * 20, emitterWire.End, Constants.WireWidth, color);
+            Utils.DrawCurrent(emitterWire.Start, emitterWire.End, emitterWire);
+
+            // Render the collector wire
+            DrawLineEx(collectorWire.Start, collectorWire.End, Constants.WireWidth, color);
+            Utils.DrawCurrent(collectorWire.Start, collectorWire.End, collectorWire);
+        }
+    }
+
+    private static void RenderNPNBase(Wire wire, Color color)
+    {
+        var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
+        DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
+        DrawLineEx(wire.End + normal * 40, wire.End - normal * 40, Constants.WireWidth, color);
+        Utils.DrawCurrent(wire.Start, wire.End, wire);
+    }
+
+    private static void RenderNPNEmitter(Wire wire, Color color)
+    {
+        DrawLineEx(wire.Start, wire.Center, Constants.WireWidth, color);
+        var normal = new Vector2(wire.Direction.Y, -wire.Direction.X);
+        Utils.DrawLineStrip(color, wire.Center, wire.Center + normal * 10, wire.Center + wire.Direction * 20, wire.Center - normal * 10, wire.Center);
+        DrawLineEx(wire.Center + wire.Direction * 20, wire.End, Constants.WireWidth, color);
+        Utils.DrawCurrent(wire.Start, wire.End, wire);
+    }
+
+    private static void RenderNPNCollector(Wire wire, Color color)
+    {
+        DrawLineEx(wire.Start, wire.End, Constants.WireWidth, color);
+        Utils.DrawCurrent(wire.Start, wire.End, wire);
+    }
 }

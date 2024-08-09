@@ -121,7 +121,7 @@ public class Wire
     /// <param name="a">The current to set.</param>
     public void SetCurrent(double a) => PreFlowCurrent = a;
 
-    private void UpdateValues()
+    protected virtual void UpdateValues()
     {
         Center = (End + Start) / 2;
         Length = (End - Start).Length();
@@ -250,6 +250,16 @@ public class Wire
         return result;
     }
 
+    /// <summary>
+    /// Sets the start and end positions without updating normal, dir and length.
+    /// </summary>
+    /// <param name="start">The new start position</param>
+    /// <param name="end">The new end position</param>
+    protected void SetPositionsNoUpdate(Vector2 start, Vector2 end)
+    {
+        this.start = start;
+        this.end = end;
+    }
 
     /// <summary>
     /// Returns a string representation of the wire.
