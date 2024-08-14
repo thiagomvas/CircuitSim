@@ -20,12 +20,25 @@ namespace CircuitSim.Core.Components
             Inputs.Add(Base);
             Inputs.Add(Collector);
             Outputs.Add(Emitter);
-
             Base.Outputs.Add(this);
+            Collector.Outputs.Add(this);
             Emitter.Inputs.Add(this);
-            Collector.Inputs.Add(this);
         }
 
+        public override void Flow()
+        {
+            double baseVoltage;
+            double emitterVoltage;
+            double collectorVoltage;
+
+            baseVoltage = Base.Voltage;
+            collectorVoltage = Collector.Voltage;
+            emitterVoltage = (baseVoltage <= 0.7) ? 0.7 : collectorVoltage;
+
+            PreFlowVoltage = emitterVoltage;
+
+            base.Flow();
+        }
 
         protected sealed override void UpdateValues()
         {
@@ -36,11 +49,18 @@ namespace CircuitSim.Core.Components
             Base.Start = Start ;
             Base.End = End - dir * 40;
 
-            Collector.Start = End - dir * 40;
-            Collector.End = End + perp * 40;
+            Collector.End = End - dir * 40;
+            Collector.Start = End + perp * 40;
 
             Emitter.Start = End - dir * 40;
-            Emitter.End = End - perp * 40; 
+            Emitter.End = End - perp * 40;
+
+            Collector.Outputs = [this];
+            Base.Outputs = [this];
+            Emitter.Inputs = [this];
+
+            this.Inputs = [Base, Collector];
+            this.Outputs = [Emitter];
 
         }
 
@@ -49,6 +69,15 @@ namespace CircuitSim.Core.Components
             circuit.AddWire(Base);
             circuit.AddWire(Emitter);
             circuit.AddWire(Collector);
+
+            Collector.Outputs = [this];
+            Base.Outputs = [this];
+            Emitter.Inputs = [this];
+
+            this.Inputs = [Base, Collector];
+            this.Outputs = [Emitter];
+
+
             SetPositionsNoUpdate(Start, Start);
         }
     }
